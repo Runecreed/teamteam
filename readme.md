@@ -1,26 +1,31 @@
-To use the project:
-
-Install Python to your PC, make sure the path variable to python exists
-( check by running a command line and writing python) --> this should not cause any errors
-
-then, install pipenv if you do not have it yet, do so by running the command:
-
-pip install pipenv
-
-Now you have the pipenv tool installed and you can use it to update your dependencies for the project
-
-To do so:
-First clone the repository // Pull from the repository
-
-notice that there is a PipFile and PipFile.lock in the root of the project, this holds dependencies for pipenv to install
-
-install them by opening a command line (terminal/shell/cmd) in the root folder of the project ---> $....../teamteam/
-and run the command
-
-pipenv install
+# teamteam
+team team team
 
 
-this will now create a virtual environment if none exists yet, and install the dependencies for you to run the project.
-In practice this should install Django 2.0.1 and the requests library on first launch
+# Purpose
 
+the repository will hold our web application. Version Control integration is useful for team programming.
 
+Make sure you install git
+https://git-scm.com/downloads
+
+after that you should be able to use the version history control modules in your favorite developer tools (Atom, Netbeans, Intellij).
+
+basic usage of git:
+
+Clone this repository 
+
+git clone https://github.com/Runecreed/teamteam/
+
+now you have a local setup for coding.
+To make changes to the repository, simply write a commit via your IDE or the command line
+
+git commit <yourmessage>
+
+you now have a version of your code available to push onto the repository, you can do so in your IDE's Version control panel
+or via the terminal by writing
+
+git push origin master
+
+to push your local copy to the master branch in the repository's remote location (which is generally called origin).
+Note that this can only push a COMMIT, if you make changes after writing a COMMIT (bascially saying you have a satisfactory version of your program), it will complain that there are changes uncommited, when this happens you need to write a new commit and push after.
