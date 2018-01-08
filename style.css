@@ -1,0 +1,74 @@
+.navbar {
+    border-bottom-width: 10px;
+    border-bottom-color: #F3CA3C;
+    background-color: #577591;
+    height: auto;
+    padding: auto;
+    margin: 0;
+    color: white;
+    border-radius: 0;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 46px;
+    font-family: 'Myriad Pro', sans-serif;
+    margin: 0px 15px 15px;
+    padding: 0px auto auto;
+}
+
+.navbar-right,
+.navbar-right a,
+.navbar-right a:active {
+    color: white;
+    text-align: center;
+    font-size: medium;
+    margin: 10px;
+}
+
+.top-bottom-margin {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.card-background {
+    background-color: #EEEEEE;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.card-title{
+    min-height: 40px;
+}
+
+.trip-card{
+    background-color: #FFFFFF;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.tab-background {
+    background-color: #F3CA3C;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.nav-tabs > li.active > a {
+    background-color: #EEEEEE;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-color: transparent;
+}
+
+
+.list-item {
+    margin-top: 20px
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    float: right;
+    margin-right: 5px
+}
