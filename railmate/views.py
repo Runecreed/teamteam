@@ -18,6 +18,10 @@ def home(request):
     return render(request, 'railmate/index.html')
 
 
+def user_page(request, user_id):
+    return HttpResponse("You're looking at user %s." % user_id)
+
+
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -59,6 +63,13 @@ def account(request):
     user_info = Profile.objects.get(pk=request.user)
     return render(request, 'railmate/account.html')
 
+
 def logout(request):
     logout_user(request)
     return redirect('/')
+
+
+@login_required
+def messages(request):
+    user_info = Profile.objects.get(pk=request.user)
+    return render(request, 'railmate/messages.html')
