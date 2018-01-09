@@ -10,6 +10,7 @@ name = "pypi"
 requests = "*"
 django = "*"
 pipenv = "*"
+pillow = "*"
 
 
 [dev-packages]
