@@ -18,5 +18,8 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
+    #ex: ../
     path('', views.home, name="home"),
+    # ex: ../user/1
+    path('<int:user_id>/', views.userpage, name='User Page'),
 ]
