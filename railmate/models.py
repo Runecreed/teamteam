@@ -7,8 +7,8 @@ import datetime
 
 class Trips(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Reference user table
-    source = models.CharField()
-    destination = models.CharField()
+    source = models.TextField()
+    destination = models.TextField()
     date = models.DateField()
     time = models.CharField(max_length='4')  # store hh:mm timestamp, parse later into DateTime object if need be
     deviation = models.IntegerField(blank=True,
