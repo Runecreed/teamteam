@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth import get_user_model
 import datetime
@@ -29,3 +30,8 @@ class Trips(models.Model):
         return self.user + ' travels from ' + self.source + ' to ' + self.destination + ' on ' + \
                self.date.strftime('%d/%m/%y') + ' at ' + self.time + ' with ' + str(self.companions) + ' passengers'
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatar/')
+    birth_date = models.DateField()
