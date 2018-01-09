@@ -10,7 +10,7 @@ class Trips(models.Model):
     source = models.TextField()
     destination = models.TextField()
     date = models.DateField()
-    time = models.CharField(max_length='4')  # store hh:mm timestamp, parse later into DateTime object if need be
+    time = models.CharField(max_length=4)  # store hh:mm timestamp, parse later into DateTime object if need be
     deviation = models.IntegerField(blank=True,
                                     null=True)  # possible deviation, not required and stored as NULL if not given
     subscription = models.TextField()
