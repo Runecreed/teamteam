@@ -25,21 +25,30 @@ def home(request):
     return render(request, 'railmate/index.html', {'form': form})
 
 
+# User filled in the form and presses Search
 def home_search(request):
-        searchQuery = request.GET.urlencode()       # debug var
+    searchQuery = request.GET.urlencode()  # debug var
 
-        source = request.GET.get('source', '')
-        destination = request.GET.get('destination', '')
-        date = request.GET.get('date', '')
-        recurrence = request.GET.get('recurrence', '')
-        deviation = request.GET.get('deviation', '')
-        time = request.GET.get('time', '')
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    date = request.GET.get('date', '')
+    recurrence = request.GET.get('recurrence', '')
+    deviation = request.GET.get('deviation', '')
+    time = request.GET.get('time', '')
 
-        search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence, 'deviation': deviation, 'time': time}
-        results = 'Not implemented yet'
-        # return results
-        form = NS().station_list()
-        return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
+    search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence,
+              'deviation': deviation, 'time': time}
+    results = 'Not implemented yet'
+    # return results
+    form = NS().station_list()
+    return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
+
+# User presses POST button to create a trip
+def home_create(request):
+    form = NS().station_list()
+
+    response = HttpResponse("To be implemented, probably want to redirect to the home page after inserting to DB")
+    return response
 
 
 def user_page(request, user_id):
