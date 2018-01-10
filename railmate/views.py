@@ -13,11 +13,16 @@ from django.shortcuts import render, redirect
 from railmate.forms import UserForm, ProfileForm
 from railmate.models import Profile
 
+from railmate.services import NS
+
 
 def home(request):
     # Required :: Form must have keys 'source', with a list of sources undearneatha:: form = {'station': ['Eindhoven', 'Maastricht', ...], 'destination: ..}
     # refer to it in the template as : form.source  --- gets the list of sources
-    form = {'station': ['Eindhoven', 'Maastricht']}
+    # form = {'station': ['Eindhoven', 'Maastricht']}
+
+    form = NS().station_list()
+
     return render(request, 'railmate/index.html',  {'form' : form})
 
 
