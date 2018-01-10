@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import loader
+from django.template import Context, Template, loader
 
 from django.contrib.auth import logout as logout_user
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,10 @@ from railmate.models import Profile
 
 
 def home(request):
-    return render(request, 'railmate/index.html')
+    # Required :: Form must have keys 'source', with a list of sources undearneatha:: form = {'station': ['Eindhoven', 'Maastricht', ...], 'destination: ..}
+    # refer to it in the template as : form.source  --- gets the list of sources
+    form = {'station': ['Eindhoven', 'Maastricht']}
+    return render(request, 'railmate/index.html',  {'form' : form})
 
 
 def user_page(request, user_id):
