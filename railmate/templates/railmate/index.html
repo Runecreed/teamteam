@@ -58,6 +58,7 @@
 
             <div class="panel-body card-background tab-content">
                 <form class="tab-pane fade in active" id="find-trip-form" method="post" role="form">
+                    {% csrf_token %}
                     <div class="form-group col-sm-6">
                         <label for="searchFrom-source">From</label>
                         <select id='searchForm-source' name="source" class="form-control">
@@ -103,7 +104,7 @@
                     </div>
                 </form>
                 <form class="tab-pane fade" id="create-trip-form" action='.' method="post" role="form">
-
+                       {% csrf_token %}
                     <div class="form-group col-sm-6">
                         <label for="createForm-source">From</label>
                         <select id='createForm-source' name="source" class="form-control">
