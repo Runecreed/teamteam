@@ -1,0 +1,11 @@
+
+
+{% extends "railmate/index.html" %}
+
+{% block trips %}
+    <p>Available stations:</p>
+    <br>
+    {% for key, value in search_results.items %}
+        <p>{{ key }} {{ value }} .</p>
+    {% endfor %}
+{% endblock %}

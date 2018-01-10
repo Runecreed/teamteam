@@ -22,8 +22,24 @@ def home(request):
     # form = {'station': ['Eindhoven', 'Maastricht']}
 
     form = NS().station_list()
+    return render(request, 'railmate/index.html', {'form': form})
 
-    return render(request, 'railmate/index.html',  {'form' : form})
+
+def home_search(request):
+        searchQuery = request.GET.urlencode()       # debug var
+
+        source = request.GET.get('source', '')
+        destination = request.GET.get('destination', '')
+        date = request.GET.get('date', '')
+        recurrence = request.GET.get('recurrence', '')
+        deviation = request.GET.get('deviation', '')
+        time = request.GET.get('time', '')
+
+        search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence, 'deviation': deviation, 'time': time}
+        results = 'Not implemented yet'
+        # return results
+        form = NS().station_list()
+        return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
 
 
 def user_page(request, user_id):
