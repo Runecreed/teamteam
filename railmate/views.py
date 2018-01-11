@@ -1,8 +1,10 @@
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import Context, Template, loader
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template import Context, Template, loader, RequestContext
 
 from django.contrib.auth import logout as logout_user
 from django.contrib.auth.decorators import login_required
@@ -10,7 +12,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from railmate.forms import UserForm, ProfileForm
+from django.utils import formats
+
+from railmate.forms import ProfileForm, UserForm
 from railmate.models import Profile
 
 from railmate.services import NS
@@ -54,15 +58,31 @@ def home_create(request):
 def user_page(request, user_id):
     return HttpResponse("You're looking at user %s." % user_id)
 
+def login_user(request):
+    logout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    return render(request, 'railmate/login.html')
 
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.refresh_from_db()
+            user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
+
             login(request, user)
             return redirect('/account')
     else:
@@ -85,7 +105,7 @@ def editAccount(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'registration/base_profile.html', {
+    return render(request, 'railmate/editacount.html', {
         'user_form': user_form,
         'profile_form': profile_form
     })
@@ -93,16 +113,23 @@ def editAccount(request):
 
 @login_required
 def account(request):
-    user_info = Profile.objects.get(pk=request.user)
-    return render(request, 'railmate/account.html')
+    user_info = Profile.objects.get(user=request.user)
+    if (user_info.birth_date is None):
+        user_info.age = '-'
+    else:
+        user_info.age = calculate_age(user_info.birth_date)
+    return render(request, 'railmate/account.html', {'user_info': user_info})
 
+def calculate_age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 def logout(request):
     logout_user(request)
     return redirect('/')
 
-
-@login_required
-def messages(request):
-    user_info = Profile.objects.get(pk=request.user)
-    return render(request, 'railmate/messages.html')
+#
+# @login_required
+# def messages(request):
+#     user_info = Profile.objects.get(pk=request.user)
+#     return render(request, 'railmate/messages.html')
