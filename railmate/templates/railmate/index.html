@@ -63,6 +63,7 @@
                     <div class="form-group col-sm-6">
                         <label for="searchFrom-source">From</label>
                         <select id='searchForm-source' name="source" class="form-control">
+                            <option>Pick a station</option>
                             {% for station in form %}
                                 <option value="{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
@@ -71,6 +72,7 @@
                     <div class="form-group col-sm-6">
                         <label for="searchFrom-destination">To</label>
                         <select id='searchForm-destination' name="destination" class="form-control">
+                            <option>Pick a station</option>
                             {% for station in form %}
                                 <option value="{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
@@ -113,6 +115,7 @@
                     <div class="form-group col-sm-6">
                         <label for="createForm-source">From</label>
                         <select id='createForm-source' name="source" class="form-control">
+                            <option>Pick a station</option>
                             {% for station in form %}
                                 <option value="createForm-source-{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
@@ -120,7 +123,8 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="createForm-destination">To</label>
-                        <select id='createForm-destination' name="destination" class="form-control">
+                        <select id='createForm-destination' name="destination" class="form-control" required>
+                            <option>Pick a station</option>
                             {% for station in form %}
                                 <option value="createForm-destination-{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
@@ -128,7 +132,7 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="date2">Date</label>
-                        <input type="date" class="form-control" id="date2">
+                        <input type="date" class="form-control" id="date2" name="date">
                     </div>
                     <div class="form-group col-sm-6">
                         <div><label for="everytimes1">Every</label></div>
@@ -141,7 +145,7 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="time2">Time</label>
-                        <input type="time" class="form-control" id="time2">
+                        <input type="time" class="form-control" id="time2" name="time">
                     </div>
                     <div class="form-group col-sm-6">
                         <div><label for="plusminus2">+/-</label></div>
@@ -150,7 +154,7 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="sel2">Subscription</label>
-                        <select class="form-control" id="sel3">
+                        <select class="form-control" id="sel3" name="subscription">
                             <option>Weekly free</option>
                             <option>Weekend free</option>
                             <option>40% off</option>
@@ -158,7 +162,7 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="sel3">Compensation</label>
-                        <select class="form-control" id="sel4">
+                        <select class="form-control" id="sel4" name="compensation">
                             <option>Share 20%</option>
                             <option>Free beer</option>
                             <option>Other</option>
