@@ -1,8 +1,11 @@
 {% extends 'railmate/base.html' %}
 
 {% block content %}
+<div class="col-sm-12">
+    {% block account %}{% endblock %}
+</div>
 
-<div class="container text-center top-bottom-margin">
+<div class=" top-bottom-margin">
     <div class="col-sm-4 ">
         <div class="card-background" id="didyouknow ">
             <h4 class="card-title">
@@ -13,7 +16,6 @@
                 non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            {% block account %}{% endblock %}
         </div>
     </div>
 

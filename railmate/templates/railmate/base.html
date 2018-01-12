@@ -27,12 +27,12 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-            <div class="col-xs-6 col-sm-12"><a href="/account">Account <span class="glyphicon glyphicon-user"></span></a></div>
+            <div class="col-xs-6 col-sm-12"><a href="{% url 'account' %}">Account <span class="glyphicon glyphicon-user"></span></a></div>
 {#            <div class="col-xs-6 col-sm-12"><a href="/messages">Messages <span class="glyphicon glyphicon-comment"></span></a></div>#}
-            <div class="col-xs-6 col-sm-12"><a href="/logout">Logout <span class="glyphicon glyphicon-log-out"></span></a></div>
+            <div class="col-xs-6 col-sm-12"><a href="{% url 'logout' %}">Logout <span class="glyphicon glyphicon-log-out"></span></a></div>
             {% else %}
-            <div class="col-xs-6 col-sm-12"><a href="/signup">Signup <span class="glyphicon glyphicon-user"></span></a></div>
-            <div class="col-xs-6 col-sm-12"><a href="/login">Login <span class="glyphicon glyphicon-log-in"></span></a></div>
+            <div class="col-xs-6 col-sm-12"><a href="{% url 'signup' %}">Signup <span class="glyphicon glyphicon-user"></span></a></div>
+            <div class="col-xs-6 col-sm-12"><a href="{% url 'login' %}">Login <span class="glyphicon glyphicon-log-in"></span></a></div>
 
             {% endif %}
         </ul>

@@ -96,10 +96,11 @@ def editAccount(request):
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
+            # ProfileForm.birth_date=profile_form.birth_date
             user_form.save()
             profile_form.save()
             # messages.success(request, _('Your profile was successfully updated!'))
-            return redirect('profile')
+            return redirect('/account')
         else:
             messages.error(request, ('Please correct the error below.'))
     else:
@@ -114,7 +115,7 @@ def editAccount(request):
 @login_required
 def account(request):
     user_info = Profile.objects.get(user=request.user)
-    if (user_info.birth_date is None):
+    if user_info.birth_date is None:
         user_info.age = '-'
     else:
         user_info.age = calculate_age(user_info.birth_date)

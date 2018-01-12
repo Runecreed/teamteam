@@ -37,7 +37,7 @@ class Trip(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='avatar/', null=True, blank=True)
+    avatar = models.ImageField(upload_to="avatar", null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     email = models.EmailField(default='-')
 
