@@ -1,6 +1,7 @@
 {% extends "railmate/index.html" %}
 {% block account %}
-    <div id="login">
+    <div id="login" class="card-background">
+        <h3>Log in</h3>
         <form class="form-horizontal" name="LoginForm" action="/login/" method="post">
         {% csrf_token %}
         {% if next %}
@@ -18,6 +19,7 @@
                 <input type="password" name="password" id="password" placeholder="Password">
             </div>
         </div>
+        <br>
         <div class="control-group">
             <div class="controls">
                 <button type="submit" class="btn">Login</button>

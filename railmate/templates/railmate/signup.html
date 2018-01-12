@@ -1,6 +1,7 @@
 {% extends "railmate/index.html" %}
 {% block account %}
-  <h2>Sign up</h2>
+    <div class="card-background">
+  <h3>Sign up</h3>
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
@@ -13,6 +14,12 @@
         </p>
     {% endfor %}
 
-    <button type="submit">Sign up</button>
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Sign up</button>
+            </div>
+        </div>
   </form>
+    </div>
 {% endblock %}
