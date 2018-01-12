@@ -106,3 +106,17 @@ def logout(request):
 def messages(request):
     user_info = Profile.objects.get(pk=request.user)
     return render(request, 'railmate/messages.html')
+
+def create_trip(request):
+    if request.method == "POST":
+        form = TripForm(request.POST)
+        if form.is_valid():
+            trip = form.save(commit=False)
+            trip.user = request.user
+            trip.companions = 0
+            trip.max_companions = 3
+            trip.save()
+            return redirect('railmate/index.html', pk=trip.pk)
+        else:
+            form = TripForm()
+        return render(request, 'railmate/index.html', {'form': form})

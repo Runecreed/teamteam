@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     re_path(r'^search/$', views.home_search, name='search'),
-    path('create/', views.home_create, name="create"),
+    # path('create/', views.home_create, name="create"),
     path('<int:user_id>/', views.user_page, name='User Page'),
     path('login/', views.login_user, name='login'),
     path('signup/', views.signup, name='signup'),
