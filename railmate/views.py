@@ -26,7 +26,7 @@ def home(request):
     # form = {'station': ['Eindhoven', 'Maastricht']}
 
     form = NS().station_list()
-    return render(request, 'railmate/index.html', {'form': form})
+    return render(request, 'railmate/index.html', {'stations': form})
 
 
 # User filled in the form and presses Search

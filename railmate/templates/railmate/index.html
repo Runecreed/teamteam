@@ -32,7 +32,7 @@
                     <div class="form-group col-sm-6">
                         <label for="searchFrom-source">From</label>
                         <select id='searchForm-source' name="source" class="form-control">
-                            {% for station in form %}
+                            {% for station in stations %}
                                 <option value="{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
@@ -40,7 +40,7 @@
                     <div class="form-group col-sm-6">
                         <label for="searchFrom-destination">To</label>
                         <select id='searchForm-destination' name="destination" class="form-control">
-                            {% for station in form %}
+                            {% for station in stations %}
                                 <option value="{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
@@ -82,7 +82,7 @@
                     <div class="form-group col-sm-6">
                         <label for="createForm-source">From</label>
                         <select id='createForm-source' name="source" class="form-control">
-                            {% for station in form %}
+                            {% for station in stations %}
                                 <option value="createForm-source-{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
@@ -90,7 +90,7 @@
                     <div class="form-group col-sm-6">
                         <label for="createForm-destination">To</label>
                         <select id='createForm-destination' name="destination" class="form-control">
-                            {% for station in form %}
+                            {% for station in stations %}
                                 <option value="createForm-destination-{{ station.code }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
