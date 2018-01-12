@@ -1,0 +1,25 @@
+{% extends "railmate/index.html" %}
+{% block account %}
+    <div class="card-background">
+  <h3>Sign up</h3>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>{{ field.label_tag }}
+        <br>
+        {{ field }}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+        </p>
+    {% endfor %}
+
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Sign up</button>
+            </div>
+        </div>
+  </form>
+    </div>
+{% endblock %}

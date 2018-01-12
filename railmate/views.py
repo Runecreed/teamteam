@@ -10,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from railmate.forms import UserForm, ProfileForm, TripForm
+from railmate.forms import UserForm, ProfileForm
 from railmate.models import Profile
 
 from railmate.services import NS
@@ -106,17 +106,3 @@ def logout(request):
 def messages(request):
     user_info = Profile.objects.get(pk=request.user)
     return render(request, 'railmate/messages.html')
-
-def create_trip(request):
-    if request.method == "POST":
-        form = TripForm(request.POST)
-        if form.is_valid():
-            trip = form.save(commit=False)
-            trip.user = request.user
-            trip.companions = none
-            trip.max_companions = 3
-            post.save()
-            return redirect('railmate/account.html', pk=trip.pk)
-        else:
-            form = TripForm()
-        return render(request, 'railmate/account.html', {'form': form})

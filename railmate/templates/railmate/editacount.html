@@ -1,0 +1,25 @@
+{% extends "railmate/base.html" %}
+{% block content %}
+    <div class="card-background text-center">
+    <form method="post">
+    {% csrf_token %}
+    {% for field in profile_form %}
+      <p>{{ field.label_tag }}
+        <br>
+        {{ field }}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+        </p>
+        <br>
+    {% endfor %}
+
+
+        <div class="control-group">
+                <button type="submit" class="btn btn-primary" href="{% url 'account' %}" value="Submit">Save</button>
+                <a class="btn btn-default" href="{% url 'account' %}">Cancel</a>
+        </div>
+  </form>
+
+    </div>
+{% endblock %}
