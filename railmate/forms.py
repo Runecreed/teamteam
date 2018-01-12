@@ -16,7 +16,9 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    birth_date = forms.DateField(widget=SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=range(1900, date.today().year)))
+    birth_date = forms.DateField(
+        widget=SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=range(1900, date.today().year)))
+
     class Meta:
         model = Profile
 
