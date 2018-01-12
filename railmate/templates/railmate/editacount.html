@@ -1,7 +1,7 @@
 {% extends "railmate/base.html" %}
 {% block content %}
     <div class="card-background text-center">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in profile_form %}
       <p>{{ field.label_tag }}
