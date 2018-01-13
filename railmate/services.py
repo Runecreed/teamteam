@@ -49,7 +49,6 @@ class NS:
         except Exception as e:      # data was not useful
             jsonData = {"ReisMogelijkheid": "No trips possible"}
             print("Error occured looking for trip information, possibly no trip data for the source/destination combo --- message below")
-            console.log()
             print(e)
             pass                    # continue without data
 
