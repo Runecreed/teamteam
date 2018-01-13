@@ -79,13 +79,13 @@
                     </div>
                 </form>
                 {% csrf_token %}
-                <form class="tab-pane fade" id="create-trip-form" action='../create/' method="post" role="form">
+                <form class="tab-pane fade" id="create-trip-form" action='.' method="get" role="form">
                     {% csrf_token %}
                     <div class="form-group col-sm-6">
                         <label for="createForm-source">From</label>
                         <select id='createForm-source' name="source" class="form-control">
                             {% for station in stations %}
-                                <option value="createForm-source-{{ station.code }}">{{ station.name }}</option>
+                               <option value={{ station.code }}>{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -93,7 +93,7 @@
                         <label for="createForm-destination">To</label>
                         <select id='createForm-destination' name="destination" class="form-control">
                             {% for station in stations %}
-                                <option value="createForm-destination-{{ station.code }}">{{ station.name }}</option>
+                                <option value={{ station.code }}>{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -137,8 +137,8 @@
                         </select>
                     </div>
                     <div class="text-right">
-                        <button type="submit" value='post' class="btn btn-primary"><span
-                                class="glyphicon glyphicon-arrow-right"></span> Post
+                        <button type="submit" name="getTrain" class="btn btn-primary"><span
+                                class="glyphicon glyphicon-arrow-right"></span> Get train possibilities
                         </button>
                     </div>
                 </form>

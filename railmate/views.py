@@ -21,12 +21,25 @@ from railmate.services import NS
 
 
 def home(request):
-    # Required :: Form must have keys 'source', with a list of sources undearneatha:: form = {'station': ['Eindhoven', 'Maastricht', ...], 'destination: ..}
-    # refer to it in the template as : form.source  --- gets the list of sources
-    # form = {'station': ['Eindhoven', 'Maastricht']}
+    trip_list = []  # empty list initially
+    station_list = []
 
+    if request.method == 'GET' and 'getTrain' in request.GET:  # the user wants to search for possible trips with CreateTrip form
+        searchQuery = request.GET.urlencode()  # debug var
+        source = request.GET.get('source', '')
+        destination = request.GET.get('destination', '')
+        parameters = [source, destination]
+        results = NS().trip_list(parameters)
+        station_list = results['station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
+        trip_list = results['trips']        # List representation holding trips, each entry in the list trip_list[0] represents ONE possible trip with a lot of info that you can display.
+
+
+    if request.method == 'POST':  # user wants to post a new Trip! woo
+        Lol = "DO STUF HERE NUB"
+
+    # User is visiting home page.
     form = NS().station_list()
-    return render(request, 'railmate/index.html', {'stations': form})
+    return render(request, 'railmate/index.html', {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
 
 # User filled in the form and presses Search
@@ -47,9 +60,15 @@ def home_search(request):
     form = NS().station_list()
     return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
 
+
 # User presses POST button to create a trip
 def home_create(request):
-    form = NS().station_list()
+    searchQuery = request.GET.urlencode()  # debug var
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    parameters = [source, destination]
+
+    trip_list = NS().trip_list(parameters)
 
     response = HttpResponse("To be implemented, probably want to redirect to the home page after inserting to DB")
     return response
@@ -57,6 +76,7 @@ def home_create(request):
 
 def user_page(request, user_id):
     return HttpResponse("You're looking at user %s." % user_id)
+
 
 def login_user(request):
     logout(request)
@@ -71,6 +91,7 @@ def login_user(request):
                 login(request, user)
                 return HttpResponseRedirect('/')
     return render(request, 'railmate/login.html')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -120,9 +141,11 @@ def account(request):
         user_info.age = calculate_age(user_info.birth_date)
     return render(request, 'railmate/account.html', {'user_info': user_info})
 
+
 def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 
 def logout(request):
     logout_user(request)

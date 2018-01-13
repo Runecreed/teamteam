@@ -11,6 +11,7 @@ requests = "*"
 django = "*"
 pipenv = "*"
 pillow = "*"
+xmljson = "*"
 
 
 [dev-packages]
