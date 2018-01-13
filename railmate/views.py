@@ -11,13 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
-# Create your views here.
-from django.utils import formats
-
-from railmate.forms import ProfileForm, UserForm
-from railmate.models import Profile
-
-from railmate.services import NS
+from railmate.forms import ProfileForm, UserForm, MessageForm
+from railmate.models import Profile, Message
+from railmate.services import NS, MessagingService
 
 
 def home(request):
@@ -31,8 +27,10 @@ def home(request):
         destination = request.GET.get('destination', '')
         parameters = [source, destination]
         results = NS().trip_list(parameters)
-        station_list = results['station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
-        trip_list = results['trips']        # List representation holding trips, each entry in the list trip_list[0] represents ONE possible trip with a lot of info that you can display.
+        station_list = results[
+            'station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
+        trip_list = results[
+            'trips']  # List representation holding trips, each entry in the list trip_list[0] represents ONE possible trip with a lot of info that you can display.
         return render(request, 'railmate/createTripShow.html',
                       {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
@@ -41,7 +39,8 @@ def home(request):
 
     # User is visiting home page.
 
-    return render(request, 'railmate/index.html', {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
+    return render(request, 'railmate/index.html',
+                  {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
 
 # User filled in the form and presses Search
@@ -154,8 +153,19 @@ def logout(request):
     logout_user(request)
     return redirect('/')
 
-#
-# @login_required
-# def messages(request):
-#     user_info = Profile.objects.get(pk=request.user)
-#     return render(request, 'railmate/messages.html')
+
+def messages(request):
+    # conversation = Message.objects.get(user=request.user)
+    if request.method == 'POST':
+        message_form = MessageForm(request.POST)
+        if message_form.is_valid():
+            msg = message_form.save(commit=False)
+            msg.sender = request.user
+            MessagingService().send_message(msg.sender, msg.recipient, msg.content)
+            return redirect('/account')
+    else:
+        message_form = MessageForm(instance=request.user)
+    return render(request, 'railmate/messages.html', {
+        # 'messages': conversation,
+        'message_form': message_form
+    })

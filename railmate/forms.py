@@ -6,7 +6,7 @@ from django import forms
 from django.forms import SelectDateWidget
 from django.forms.fields import DateField
 
-from railmate.models import Profile
+from railmate.models import Profile, Message
 
 
 class UserForm(forms.ModelForm):
@@ -24,3 +24,12 @@ class ProfileForm(forms.ModelForm):
         model = Profile
 
         fields = ('avatar', 'email', 'birth_date')
+
+
+class MessageForm(forms.ModelForm):
+    content = forms.TextInput()
+
+    class Meta:
+        model = Message
+        fields = ('content', 'recipient')
+        labels = {'content': ''}

@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
@@ -29,10 +31,11 @@ class Trip(models.Model):
         else:
             return True
 
-    def __str__(self):      # verbose reporting of this entry
+    def __str__(self):  # verbose reporting of this entry
         # return str(self.user) + ' travels from ' + self.source + ' to ' + self.destination + ' on ' + \
         #        self.date.strftime('%d/%m/%y') + ' at ' + self.time + ' with ' + str(self.companions) + ' passengers'
-        return str(self.user) + ': ' + self.source + " --> " + self.destination + ' || passengers: ' + str(self.companions)
+        return str(self.user) + ': ' + self.source + " --> " + self.destination + ' || passengers: ' + str(
+            self.companions)
 
 
 class Profile(models.Model):
@@ -41,6 +44,36 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     email = models.EmailField(default='-')
 
+
+# AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
+
+class Message(models.Model):
+    content = models.TextField('Content', default='')
+    sender = models.ForeignKey(User, related_name='sent_dm', verbose_name="Sender", default='',
+                               on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_dm',
+                                  verbose_name="Recipient", default='', on_delete=models.CASCADE)
+    sent_at = models.DateTimeField("sent at", null=True, blank=True)
+    read_at = models.DateTimeField("read at", null=True, blank=True)
+
+    @property
+    def unread(self):
+        """returns whether the message was read or not"""
+        if self.read_at is not None:
+            return False
+        return True
+
+    def __str__(self):
+        return self.content
+
+    def save(self, **kwargs):
+        if self.sender == self.recipient:
+            raise ValidationError("You can't send messages to yourself")
+
+        if not self.id:
+            self.sent_at = datetime.datetime.now()
+        super(Message, self).save(**kwargs)
 
 
 # @receiver(post_save, sender=User)
