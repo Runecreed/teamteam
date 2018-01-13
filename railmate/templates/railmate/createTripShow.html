@@ -7,9 +7,9 @@
         <p>Sorry, there are no trips available at this time</p>
         <a href="/">Return to home page</a>
     {% else %}
-        <form method='POST' action='/createTrip/'>
-            {% csrf_token %}
-            {% for trip in trip_list %}
+        {% csrf_token %}
+        {% for trip in trip_list %}
+            <form method='POST' action='/createTrip/'>
                 {% for key, value in trip.items %}
                     {% if key == 'Melding' %} {# the entry called 'Melding' is a dictionary, expand it #}
                         {% for key1, value1 in value.items %}
@@ -53,9 +53,9 @@
                     {% endif %}
                 {% endfor %}
                 <input type="submit" name='tripSelect' value="Select this trip">
-                </form>
-                <hr>
-                <hr>
-            {% endfor %}
+            </form>
+            <hr>
+            <hr>
+        {% endfor %}
     {% endif %}
 {% endblock %}
