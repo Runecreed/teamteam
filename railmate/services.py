@@ -6,6 +6,7 @@ from xmljson import parker, Parker
 import json
 import collections, types
 
+
 class NS:
     _username = 'g.buntinx@student.tue.nl'
     _password = 'EyccWJlIkL27BLh3On8zrRMiie_Z3r-WQAjDaZMBA93sD15cEAWT7A'
@@ -41,18 +42,15 @@ class NS:
         jsonDataString = json.dumps(parker.data(ET.fromstring(
             data.content)))  # Parker parses all options into a list of tuples under 'Reismogelijkheid: [ ... , {'keys': 'values', .. }, {...} ]
         jsonData = json.loads(jsonDataString)
-        try:  # see if the data is useful
+        try:  # Unpack data, gracefully exit if we have an error here (NS API can have various types of retrieval, list, tuple, dict, ..)
             partialTrip = jsonData['ReisMogelijkheid'][0]['ReisDeel']  # get trip info (can be single element or a list)
+            if type(partialTrip) is dict:
+                partialTrip = partialTrip.items()  # always use lists here even if single element for consistency
 
-            if type(partialTrip) is dict: # trip does not have transfers, single element, unfold stations
-                for station in partialTrip['ReisStop']:
-                  if station['Naam'] not in list:  # see if it's in the list already
-                    list.append(station['Naam'])  # add it if not present (order matters)
-            else:  # this dataset has transfers, so partialTrip is a LIST rather than an element, so iterate it
-                for trip in partialTrip:
-                    for station in trip['ReisStop']:  # for all trips in the partial trip list (or single trip element
-                        if station['Naam'] not in list:  # see if it's in the list already
-                            list.append(station['Naam'])  # add it if not present (order matters)
+            for trip in partialTrip:
+                for station in trip['ReisStop']:  # for all trips in the partial trip list (or single trip element
+                    if station['Naam'] not in list:  # see if it's in the list already
+                        list.append(station['Naam'])  # add it if not present (order matters)
 
         except Exception as e:  # data was not useful
             jsonData = {"ReisMogelijkheid": "No trips possible"}

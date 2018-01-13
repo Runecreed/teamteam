@@ -62,16 +62,17 @@ def home_search(request):
 
 
 # User presses POST button to create a trip
-def home_create(request):
-    searchQuery = request.GET.urlencode()  # debug var
-    source = request.GET.get('source', '')
-    destination = request.GET.get('destination', '')
-    parameters = [source, destination]
-
-    trip_list = NS().trip_list(parameters)
-
-    response = HttpResponse("To be implemented, probably want to redirect to the home page after inserting to DB")
-    return response
+# # REDUNDANT - NOT USED ANYMORE
+# def home_create(request):
+#     searchQuery = request.GET.urlencode()  # debug var
+#     source = request.GET.get('source', '')
+#     destination = request.GET.get('destination', '')
+#     parameters = [source, destination]
+#
+#     trip_list = NS().trip_list(parameters)
+#
+#     response = HttpResponse("To be implemented, probably want to redirect to the home page after inserting to DB")
+#     return response
 
 
 def user_page(request, user_id):
