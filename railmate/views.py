@@ -23,6 +23,7 @@ from railmate.services import NS
 def home(request):
     trip_list = []  # empty list initially
     station_list = []
+    form = NS().station_list()
 
     if request.method == 'GET' and 'getTrain' in request.GET:  # the user wants to search for possible trips with CreateTrip form
         searchQuery = request.GET.urlencode()  # debug var
@@ -32,13 +33,14 @@ def home(request):
         results = NS().trip_list(parameters)
         station_list = results['station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
         trip_list = results['trips']        # List representation holding trips, each entry in the list trip_list[0] represents ONE possible trip with a lot of info that you can display.
-
+        return render(request, 'railmate/createTripShow.html',
+                      {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
     if request.method == 'POST':  # user wants to post a new Trip! woo
         Lol = "DO STUF HERE NUB"
 
     # User is visiting home page.
-    form = NS().station_list()
+
     return render(request, 'railmate/index.html', {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
 

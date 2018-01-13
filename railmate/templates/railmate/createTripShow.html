@@ -1,0 +1,47 @@
+{% extends "railmate/index.html" %}
+
+{% block content %}
+    <p>Select a train trip:</p>
+    <br>
+    {% if trip_list == 'none' %}
+        <p>Sorry, there are no trips available at this time</p>
+        <a href="/">Return to home page</a>
+    {% else %}
+        <form method='POST' action='/createTrip/'>
+            {% csrf_token %}
+            {% for trip in trip_list %}
+                {% for key, value in trip.items %}
+                    {% if key == 'ReisDeel' %} {# the entry called 'ReisDeel' is a dictionary, expand it #}
+                        {% for key, value in value.items %}
+                            {% if key == 'ReisStop' %}         {# ReisStop is a list.... report elements #}
+                                {% for trainstops in value %}     {# iterate over the elements in the ReisStop list #}
+                                    <input type='hidden' value='{{ trainstops.Naam }}' name='ReisStop-Naam'>
+                                    <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
+                                    <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
+                                    {# keep track of the data in this form for selection postin later #}
+                                    <p>Name: {{ trainstops.Naam }} </p>
+                                    <p>Time: {{ trainstops.Tijd }} </p>
+                                    <p>Track: {{ trainstops.Spoor }} </p>
+
+                                {% endfor %}
+                            {% else %}      {# Just normal key value pairs #}
+                                <input type='hidden' value='{{ value }}' name='Reisdeel-{{ key }}'>
+                                {# keep track of the data in this form for selection postin later #}
+                                <p>in ReisDeel: {{ key }} {{ value }}</p>
+
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}       {# the entries here are just information, report them #}
+
+                        <input type='hidden' value='{{ value }}' name='{{ key }}'>
+                        {# keep track of the data in this form for selection postin later #}
+                        <p>{{ key }} {{ value }} .</p>
+                    {% endif %}
+                {% endfor %}
+                <input type="submit" name='tripSelect' value="Select this trip">
+                </form>
+                <hr>
+                <hr>
+            {% endfor %}
+    {% endif %}
+{% endblock %}

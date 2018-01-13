@@ -42,18 +42,18 @@ class NS:
         jsonDataString = json.dumps(parker.data(ET.fromstring(
             data.content)))  # Parker parses all options into a list of tuples under 'Reismogelijkheid: [ ... , {'keys': 'values', .. }, {...} ]
         jsonData = json.loads(jsonDataString)
-        try:  # Unpack data, gracefully exit if we have an error here (NS API can have various types of retrieval, list, tuple, dict, ..)
+        try:  # Unpack data, gracefully exit if we have an error here (NS API can have various types of retrieval, list, tuple, dict,
             partialTrip = jsonData['ReisMogelijkheid'][0]['ReisDeel']  # get trip info (can be single element or a list)
             if type(partialTrip) is dict:
-                partialTrip = partialTrip.items()  # always use lists here even if single element for consistency
+                partialTrip = [ partialTrip ]  # always use lists here even if single element for consistency
 
             for trip in partialTrip:
                 for station in trip['ReisStop']:  # for all trips in the partial trip list (or single trip element
                     if station['Naam'] not in list:  # see if it's in the list already
                         list.append(station['Naam'])  # add it if not present (order matters)
 
-        except Exception as e:  # data was not useful
-            jsonData = {"ReisMogelijkheid": "No trips possible"}
+        except Exception as e:  # data was not useful (empty trip, or issues with the API)
+            jsonData = {"ReisMogelijkheid": 'none'}
             print(
                 "Error occured looking for trip information, possibly no trip data for the source/destination combo --- message below")
             print(e)
