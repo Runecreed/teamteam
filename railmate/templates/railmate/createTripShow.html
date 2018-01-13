@@ -11,25 +11,39 @@
             {% csrf_token %}
             {% for trip in trip_list %}
                 {% for key, value in trip.items %}
-                    {% if key == 'ReisDeel' %} {# the entry called 'ReisDeel' is a dictionary, expand it #}
-                        {% for key, value in value.items %}
-                            {% if key == 'ReisStop' %}         {# ReisStop is a list.... report elements #}
-                                {% for trainstops in value %}     {# iterate over the elements in the ReisStop list #}
-                                    <input type='hidden' value='{{ trainstops.Naam }}' name='ReisStop-Naam'>
-                                    <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
-                                    <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
+                    {% if key == 'Melding' %} {# the entry called 'Melding' is a dictionary, expand it #}
+                        {% for key1, value1 in value.items %}
+                            <p>MELDING: {{ key1 }} {{ value1 }} .</p>
+                        {% endfor %}
+
+                    {% elif  key == 'ReisDeel' %} {# the entry called 'ReisDeel' is a list of dict, expand it #}
+
+                        {% for entries in value %}
+                            <br>
+                            <p>Gedeelte van de Reis tot Overstap</p>
+                            <br>
+                            {% for key1, value1 in entries.items %}
+                                {#                                <p>Resideel- {{ key1 }} reisdeel- {{ value1 }}</p>#}
+                                {% if key1 == 'Reisdetails' %}         {# ReisStop is a list.... report elements #}
+                                    {#                                    seriously just ignore this #}
+                                {% elif key1 == 'ReisStop' %}         {# ReisStop is a list.... report elements #}
+                                    {% for trainstops in value1 %}
+                                        {# iterate over the elements in the ReisStop list #}
+                                        <input type='hidden' value='{{ trainstops.Naam }}' name='ReisStop-Naam'>
+                                        <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
+                                        <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
+                                        {# keep track of the data in this form for selection postin later #}
+                                        <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>
+                                        <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>
+                                        <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
+                                    {% endfor %}
+                                {% else %}      {# Just normal key value pairs #}
+                                    <input type='hidden' value='{{ value1 }}' name='Reisdeel-{{ key1 }}'>
                                     {# keep track of the data in this form for selection postin later #}
-                                    <p>Name: {{ trainstops.Naam }} </p>
-                                    <p>Time: {{ trainstops.Tijd }} </p>
-                                    <p>Track: {{ trainstops.Spoor }} </p>
+                                    <p>ReisDeel: {{ key1 }} {{ value1 }}</p>
 
-                                {% endfor %}
-                            {% else %}      {# Just normal key value pairs #}
-                                <input type='hidden' value='{{ value }}' name='Reisdeel-{{ key }}'>
-                                {# keep track of the data in this form for selection postin later #}
-                                <p>in ReisDeel: {{ key }} {{ value }}</p>
-
-                            {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
                     {% else %}       {# the entries here are just information, report them #}
 
