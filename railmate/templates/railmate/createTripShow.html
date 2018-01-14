@@ -9,10 +9,15 @@
         <p>Sorry, there are no trips available at this time</p>
         <a href="/">Return to home page</a>
     {% else %}
-        {% csrf_token %}
+
         {% for trip in trip_list %}         {# LIST ITERATION #}
             {# Every Trip should be submittable #}
             <form method='POST' action='/createTrip/'>
+            <input type="hidden" value="{{ fromStation }}" name="fromStation">
+            <input type="hidden" value="{{  toStation }}" name="toStation">
+            <input type="hidden" value="{{  subscription }}" name="subscription">
+            <input type="hidden" value="{{  compensation }}" name="compensation">
+                    {% csrf_token %}
                 {% for tripinfo, tripvalue in trip.items %} {#  DICTIONARY ITERATION #}
                     {# expand the trip information  #}
 
@@ -46,8 +51,10 @@
                                         <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
                                     {% endfor %}
                                 </div>
-                            {% else %}      {# Just normal key value pairs #}
+                            {% else %}
+                               {# Just normal key value pairs #}
                                 <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
+                                  <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>
                                 {# keep track of the data in this form for selection postin later #}
 
                             {% endif %}
@@ -74,8 +81,10 @@
                                             <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
                                         {% endfor %}
                                     </div>
-                                {% else %}      {# Just normal key value pairs #}
+                                      {% else %}
+                                   {# Just normal key value pairs #}
                                     <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
+                                       <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>
                                     {# keep track of the data in this form for selection postin later #}
 
                                 {% endif %}

@@ -35,7 +35,7 @@
                         <label for="searchFrom-source">From</label>
                         <select id='searchForm-source' name="source" class="form-control">
                             {% for station in stations %}
-                                <option value="{{ station.code }}">{{ station.name }}</option>
+                                <option value="{{ station.name }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -43,7 +43,7 @@
                         <label for="searchFrom-destination">To</label>
                         <select id='searchForm-destination' name="destination" class="form-control">
                             {% for station in stations %}
-                                <option value="{{ station.code }}">{{ station.name }}</option>
+                                <option value="{{ station.name }}">{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -85,7 +85,7 @@
                         <label for="createForm-source">From</label>
                         <select id='createForm-source' name="source" class="form-control">
                             {% for station in stations %}
-                               <option value={{ station.code }}>{{ station.name }}</option>
+                               <option value={{ station.name }}>{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -93,7 +93,7 @@
                         <label for="createForm-destination">To</label>
                         <select id='createForm-destination' name="destination" class="form-control">
                             {% for station in stations %}
-                                <option value={{ station.code }}>{{ station.name }}</option>
+                                <option value={{ station.name }}>{{ station.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

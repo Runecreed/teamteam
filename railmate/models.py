@@ -17,6 +17,7 @@ class Trip(models.Model):
     destination = models.TextField()
     datetime = models.DateTimeField()       # ISO8601 formatted DateTime field
     datetime_end = models.DateTimeField()
+    tripnumber = models.IntegerField()
 
     # time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
     # time_end = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
@@ -38,7 +39,7 @@ class Trip(models.Model):
     def __str__(self):  # verbose reporting of this entry
         # return str(self.user) + ' travels from ' + self.source + ' to ' + self.destination + ' on ' + \
         #        self.date.strftime('%d/%m/%y') + ' at ' + self.time + ' with ' + str(self.companions) + ' passengers'
-        return str(self.user) + ': ' + self.source + " --> " + self.destination + ' || passengers: ' + str(
+        return str(self.user) + ' --- Tripnumber: ' + str(self.tripnumber) + ' starting station: '+ self.source + " endStation " + self.destination + ' || extra passengers: ' + str(
             self.companions)
 
 

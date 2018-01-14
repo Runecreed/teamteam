@@ -1,5 +1,7 @@
 from datetime import date
 
+from django.utils import dateparse
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, render_to_response
@@ -11,8 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
-from railmate.forms import ProfileForm, UserForm, MessageForm
-from railmate.models import Profile, Message
+from railmate.forms import ProfileForm, UserForm, MessageForm, TripForm
+from railmate.models import Profile, Message, Trip
 from railmate.services import NS, MessagingService
 
 
@@ -27,11 +29,13 @@ def home(request):
         destination = request.GET.get('destination', '')
         date = request.GET.get('date', '')
         time = request.GET.get('time', '')
-        datetime =''
+        subscription = request.GET.get('subscription', '')
+        compensation = request.GET.get('compensation', '')
 
-        if date and time:        # there is a date and time given
-            datetime = date+'T'+time        # proper dateTime format
+        datetime = ''
 
+        if date and time:  # there is a date and time given
+            datetime = date + 'T' + time  # proper dateTime format
 
         parameters = {'fromStation': source, 'toStation': destination, 'dateTime': datetime}
         results = NS().trip_list(parameters)
@@ -40,15 +44,55 @@ def home(request):
         trip_list = results[
             'trips']  # List representation holding trips, each entry in the list trip_list[0] represents ONE possible trip with a lot of info that you can display.
         return render(request, 'railmate/createTripShow.html',
-                      {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
-
-    if request.method == 'POST':  # user wants to post a new Trip! woo
-       return HttpResponse('Hello')
+                      {'stations': form, 'trip_list': trip_list, 'station_list': station_list, 'fromStation': source,
+                       'toStation': destination, 'subscription': subscription, 'compensation': compensation})
 
     # User is visiting home page.
-
     return render(request, 'railmate/index.html',
                   {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
+
+
+@login_required
+def create_trip(request):
+    if request.method == 'POST':  # user wants to post a new Trip! woo
+
+        current_user = request.user
+        user = current_user.id
+
+        source = request.POST.get('fromStation')
+        destination = request.POST.get('toStation')
+        get_date = request.POST.get('GeplandeVertrekTijd')
+        datetime = dateparse.parse_datetime(get_date)
+
+        get_date_end = request.POST.get('GeplandeAankomstTijd')
+        datetime_end = dateparse.parse_datetime(get_date_end)
+
+        tripnumber = int(request.POST.get('RitNummer'))
+        compensation = request.POST.get('compensation')
+        subscription = request.POST.get('subscription')
+        deviation = mk_int(request.POST.get('deviation', ''))
+        companions = 0
+        max_companions = 3
+
+        formData = {'user': user,
+                    'source': source,
+                    'destination': destination,
+                    'datetime': datetime,
+                    'datetime_end': datetime_end,
+                    'tripnumber': tripnumber,
+                    'compensation': compensation,
+                    'subscription': subscription,
+                    'deviation': deviation,
+                    'companions': companions,
+                    'max_companions': max_companions,
+                    }
+        tripform = TripForm(formData)
+
+        if tripform.is_valid():
+            tripform.save()
+            return HttpResponse('VALID FORM! Should be posted now')
+        else:
+            return HttpResponse('INVALID FORM! NOO')
 
 
 # User filled in the form and presses Search
@@ -177,3 +221,8 @@ def messages(request):
         # 'messages': conversation,
         'message_form': message_form
     })
+
+
+def mk_int(s):
+    s = s.strip()
+    return int(s) if s else 0
