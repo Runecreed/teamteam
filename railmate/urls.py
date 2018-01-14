@@ -20,12 +20,15 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     re_path(r'^search/$', views.home_search, name='search'),
+    re_path(r'^listTrips/$', views.home, name='getTrips'),
+    re_path(r'^createTrip/$', views.create_trip, name='createTrip'),
+    # path('create/', views.home_create, name="create"),
     # path('create/', views.home_create, name="create"),
     path('<int:user_id>/', views.user_page, name='User Page'),
     path('login/', views.login_user, name='login'),
     path('signup/', views.signup, name='signup'),
     path('account/', views.account, name='account'),
     path('edit/', views.editAccount, name='edit'),
-    # path('messages/', views.messages, name='messages'),
+    path('messages/', views.messages, name='messages'),
     path('logout/', views.logout, name='logout'),
 ]

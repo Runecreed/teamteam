@@ -1,0 +1,95 @@
+{% extends "railmate/base.html" %}
+{% block content %}
+    <div class="container text-center top-bottom-margin">
+        <div class="col-sm-4 text-left">
+            <div class="card-background row" id="reviews">
+                <h4>Reviews</h4>
+                <ul class="list-unstyled">
+                    <li class="list-item"><img class="avatar" src="">
+                        <h4>Comment title</h4>
+                        <p>Comment itself</p>
+                    </li>
+                    <li class="list-item"><img class="avatar" src="">
+                        <h4>Comment title</h4>
+                        <p>Comment itself</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="col-sm-8 ">
+            <div class="tab-background">
+
+                <div class="panel-body card-background tab-content text-left">
+                    <form class="tab-pane fade in active" id="my-trips" method="post" role="form">
+                        <ul class="list-unstyled row">
+                            <!-- content of my trips-->
+                            <li>
+                                <h5 class="text-center"><strong>Thursday 14-12-2017</strong></h5>
+                                <div class="col-xs-6">
+                                    <div class="trip-card">
+                                        <p>Den Bosch - Amsterdam <br> 12:00 - 13:10</p>
+                                        <a href="#">Add persons <span class="glyphicon glyphicon-plus-sign"></span></a>
+                                        <a href="#" class="avatar">edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="trip-card">
+                                        <p>Den Bosch - Amsterdam <br> 12:00 - 13:10</p>
+                                        <a href="#">Add persons <span class="glyphicon glyphicon-plus-sign"></span></a>
+                                        <a href="#" class="avatar">edit</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <h5 class="text-center"><strong>Friday 15-12-2017</strong></h5>
+                                <div class="col-xs-6">
+                                    <div class="trip-card">
+                                        <p>Den Bosch - Amsterdam <br> 12:00 - 13:10</p>
+                                        <a href="#">Add persons <span class="glyphicon glyphicon-plus-sign"></span></a>
+                                        <a href="#" class="avatar">edit</a>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="trip-card">
+                                        <p>Den Bosch - Amsterdam <br> 12:00 - 13:10</p>
+                                        <a href="#">Add persons <span class="glyphicon glyphicon-plus-sign"></span></a>
+                                        <a href="#" class="avatar">edit</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </form>
+
+                </div>
+                <div class="card-background">
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in message_form %}
+                        <p>{{ field.label_tag }}
+                            <br>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </p>
+                    {% endfor %}
+
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn">Send</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
