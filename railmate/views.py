@@ -26,8 +26,14 @@ def home(request):
         source = request.GET.get('source', '')
         destination = request.GET.get('destination', '')
         date = request.GET.get('date', '')
+        time = request.GET.get('time', '')
+        datetime =''
 
-        parameters = {'fromStation': source, 'toStation': destination}
+        if date and time:        # there is a date and time given
+            datetime = date+'T'+time        # proper dateTime format
+
+
+        parameters = {'fromStation': source, 'toStation': destination, 'dateTime': datetime}
         results = NS().trip_list(parameters)
         station_list = results[
             'station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
