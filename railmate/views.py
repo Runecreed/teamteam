@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 from django.utils import dateparse
 
@@ -31,15 +31,19 @@ def home(request):
         time = request.GET.get('time', '')
         subscription = request.GET.get('subscription', '')
         compensation = request.GET.get('compensation', '')
-
-        my_datetime = ''
+        my_datetime = ''  # init to empty
 
         if date and time:  # there is a date and time given
             my_datetime = date + 'T' + time  # proper dateTime format
 
-        temp_time = datetime.now()
-        my_datetime = temp_time.replace(second=0, microsecond=0).isoformat()[:-3]   # proper format, no seconds
+        elif date and not time:  # only a date
+            my_datetime = date + 'T' + datetime.now().time().replace(microsecond=0).isoformat()[:-3]
 
+        elif time:  # only a time, so take today
+            my_datetime = datetime.now().isoformat().partition('T')[0] + 'T' + time  # stip off time
+        else:
+            # default daytime
+            my_datetime = datetime.now().replace(microsecond=0).isoformat()[:-3]
 
         parameters = {'fromStation': source, 'toStation': destination, 'dateTime': my_datetime}
         results = NS().trip_list(parameters)
