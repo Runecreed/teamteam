@@ -25,7 +25,9 @@ def home(request):
         searchQuery = request.GET.urlencode()  # debug var
         source = request.GET.get('source', '')
         destination = request.GET.get('destination', '')
-        parameters = [source, destination]
+        date = request.GET.get('date', '')
+
+        parameters = {'fromStation': source, 'toStation': destination}
         results = NS().trip_list(parameters)
         station_list = results[
             'station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
@@ -35,7 +37,7 @@ def home(request):
                       {'stations': form, 'trip_list': trip_list, 'station_list': station_list})
 
     if request.method == 'POST':  # user wants to post a new Trip! woo
-        Lol = "DO STUF HERE NUB"
+       return HttpResponse('Hello')
 
     # User is visiting home page.
 

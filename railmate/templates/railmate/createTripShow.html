@@ -1,4 +1,6 @@
 {% extends "railmate/index.html" %}
+{% load template_extra %}   {# custom extention that allows for type checking #}
+
 
 {% block content %}
     <p>Select a train trip:</p>
@@ -8,27 +10,33 @@
         <a href="/">Return to home page</a>
     {% else %}
         {% csrf_token %}
-        {% for trip in trip_list %}
+        {% for trip in trip_list %}         {# LIST ITERATION #}
+            {# Every Trip should be submittable #}
             <form method='POST' action='/createTrip/'>
-                {% for key, value in trip.items %}
-                    {% if key == 'Melding' %} {# the entry called 'Melding' is a dictionary, expand it #}
-                        {% for key1, value1 in value.items %}
-                            <p>MELDING: {{ key1 }} {{ value1 }} .</p>
+                {% for tripinfo, tripvalue in trip.items %} {#  DICTIONARY ITERATION #}
+                    {# expand the trip information  #}
+
+                    {# Optional MELDING part #}
+                    {% if tripinfo == 'Melding' %} {# the entry called 'Melding' is a dictionary, expand it #}
+                        {% for meldingkey, meldingvalue in tripvalue.items %}
+                            <p>MELDING: {{ meldingkey }} {{ meldingvalue }} .</p>
                         {% endfor %}
 
-                    {% elif  key == 'ReisDeel' %} {# the entry called 'ReisDeel' is a list of dict, expand it #}
+                        {# Part(or full) trip. partial in case of a transfer required #}
+                        {#                        The ReisDeel part of a trip MAY be a dictionary (1 part) OR it is a LIST, multiple parts, expand both#}
+                    {% elif  tripinfo == 'ReisDeel' and tripvalue|isDict %}
+                        {# the entry called 'ReisDeel' is a dict, expand it  as dict#}
 
-                        {% for entries in value %}
-                            <br>
-                            <p>Gedeelte van de Reis tot Overstap</p>
-                            <br>
-                            {% for key1, value1 in entries.items %}
-                                {#                                <p>Resideel- {{ key1 }} reisdeel- {{ value1 }}</p>#}
-                                {% if key1 == 'Reisdetails' %}         {# ReisStop is a list.... report elements #}
-                                    {#                                    seriously just ignore this #}
-                                {% elif key1 == 'ReisStop' %}         {# ReisStop is a list.... report elements #}
-                                    {% for trainstops in value1 %}
+                        {% for reisdeelkey, reisdeelvalue in tripvalue.items %}
+
+                            {% if reisdeelkey == 'Reisdetails' %}         {# Ignore this part, too much info #}
+
+                            {% elif reisdeelkey == 'ReisStop' %}         {# ReisStop is a list.... report elements #}
+                                <p>Trajectory Information of this part of the trip </p>
+                                <div style="background-color: green">
+                                    {% for trainstops in reisdeelvalue %}
                                         {# iterate over the elements in the ReisStop list #}
+
                                         <input type='hidden' value='{{ trainstops.Naam }}' name='ReisStop-Naam'>
                                         <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
                                         <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
@@ -37,19 +45,47 @@
                                         <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>
                                         <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
                                     {% endfor %}
+                                </div>
+                            {% else %}      {# Just normal key value pairs #}
+                                <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
+                                {# keep track of the data in this form for selection postin later #}
+
+                            {% endif %}
+                        {% endfor %}
+                    {% elif  tripinfo == 'ReisDeel' %}      {# expand it as list instead #}
+                        {% for trip in tripvalue %}
+                            {% for reisdeelkey, reisdeelvalue in trip.items %}
+
+                                {% if reisdeelkey == 'Reisdetails' %}         {# Ignore this part, too much info #}
+
+                                {% elif reisdeelkey == 'ReisStop' %}
+                                    {# ReisStop is a list.... report elements #}
+                                    <p>Trajectory Information of this part of the trip </p>
+                                    <div style="background-color: green">
+                                        {% for trainstops in reisdeelvalue %}
+                                            {# iterate over the elements in the ReisStop list #}
+
+                                            <input type='hidden' value='{{ trainstops.Naam }}' name='ReisStop-Naam'>
+                                            <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
+                                            <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
+                                            {# keep track of the data in this form for selection postin later #}
+                                            <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>
+                                            <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>
+                                            <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
+                                        {% endfor %}
+                                    </div>
                                 {% else %}      {# Just normal key value pairs #}
-                                    <input type='hidden' value='{{ value1 }}' name='Reisdeel-{{ key1 }}'>
+                                    <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
                                     {# keep track of the data in this form for selection postin later #}
-                                    <p>ReisDeel: {{ key1 }} {{ value1 }}</p>
 
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
-                    {% else %}       {# the entries here are just information, report them #}
 
-                        <input type='hidden' value='{{ value }}' name='{{ key }}'>
+                    {% else %}       {# the entries here are just information, report them #}
+                        <input type='hidden' name='{{ tripinfo }}' value='{{ tripvalue }}'>
                         {# keep track of the data in this form for selection postin later #}
-                        <p>{{ key }} {{ value }} .</p>
+                        <p>{{ tripinfo }} {{ tripvalue }} .</p>
                     {% endif %}
                 {% endfor %}
                 <input type="submit" name='tripSelect' value="Select this trip">

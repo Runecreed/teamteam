@@ -32,14 +32,15 @@ class NS:
             station_list.append({'code': code, 'name': station_name})
         return station_list
 
-    # NOTE: parameters should be a list of 2 elements  :: source -- destination, IN THAT ORDER
+    # NOTE: parameters should be a list of parameters
     def trip_list(self, parameters):
         API = "http://webservices.ns.nl/ns-api-treinplanner?"
 
-        source = parameters[0]
-        destination = parameters[1]
+        query = ''
+        for key, value in parameters.items():
+            query = query + key + '=' + value + '&'
 
-        query = "fromStation=" + source + "&toStation=" + destination  # It might be that SPACES need to converted to + in the query, but probably already taken care of
+        # query = "fromStation=" + source + "&toStation=" + destination  # It might be that SPACES need to converted to + in the query, but probably already taken care of
         data = requests.get(API + query,
                             auth=HTTPBasicAuth(self._username, self._password))  # response is in XML format
 

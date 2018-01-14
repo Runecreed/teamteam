@@ -15,8 +15,12 @@ class Trip(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Reference user table
     source = models.TextField()
     destination = models.TextField()
-    date = models.DateField()
-    time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+    datetime = models.DateTimeField()       # ISO8601 formatted DateTime field
+    datetime_end = models.DateTimeField()
+
+    # time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+    # time_end = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+
     deviation = models.IntegerField(blank=True,
                                     null=True)  # possible deviation, not required and stored as NULL if not given
     subscription = models.TextField()
