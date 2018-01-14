@@ -24,7 +24,7 @@
 
                         {# Part(or full) trip. partial in case of a transfer required #}
                         {#                        The ReisDeel part of a trip MAY be a dictionary (1 part) OR it is a LIST, multiple parts, expand both#}
-                    {% elif  tripinfo == 'ReisDeel' and tripvalue|isDict %}
+                    {% elif  tripinfo == 'ReisDeel' and tripvalue|isDict %}     {# This is hacky as hell, you dont want to do type checking in a template #}
                         {# the entry called 'ReisDeel' is a dict, expand it  as dict#}
 
                         {% for reisdeelkey, reisdeelvalue in tripvalue.items %}
@@ -52,7 +52,7 @@
 
                             {% endif %}
                         {% endfor %}
-                    {% elif  tripinfo == 'ReisDeel' %}      {# expand it as list instead #}
+                    {% elif  tripinfo == 'ReisDeel' %}      {# expand it as list instead, the code block above does the same but for a dict #}
                         {% for trip in tripvalue %}
                             {% for reisdeelkey, reisdeelvalue in trip.items %}
 
