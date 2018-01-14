@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.utils import dateparse
 
@@ -32,12 +32,16 @@ def home(request):
         subscription = request.GET.get('subscription', '')
         compensation = request.GET.get('compensation', '')
 
-        datetime = ''
+        my_datetime = ''
 
         if date and time:  # there is a date and time given
-            datetime = date + 'T' + time  # proper dateTime format
+            my_datetime = date + 'T' + time  # proper dateTime format
 
-        parameters = {'fromStation': source, 'toStation': destination, 'dateTime': datetime}
+        temp_time = datetime.now()
+        my_datetime = temp_time.replace(second=0, microsecond=0).isoformat()[:-3]   # proper format, no seconds
+
+
+        parameters = {'fromStation': source, 'toStation': destination, 'dateTime': my_datetime}
         results = NS().trip_list(parameters)
         station_list = results[
             'station_intermediate']  # List of Intermediate stations between source and destionation, IE: Eindhoven -- Weert -- Roermond -- Sittard ...
