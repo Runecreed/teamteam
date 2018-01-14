@@ -6,7 +6,7 @@ from django import forms
 from django.forms import SelectDateWidget
 from django.forms.fields import DateField
 
-from railmate.models import Profile
+from railmate.models import Profile, Trip, Search
 
 
 class UserForm(forms.ModelForm):
@@ -22,3 +22,15 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('avatar', 'birth_date')
+
+
+class TripForm(forms.ModelForm):
+    class Meta:
+        model = Trip
+        fields = ('source', 'destination', 'date', 'time', 'deviation', 'subscription', 'compensation')
+
+
+class SearchForm(forms.ModelForm):
+    class Meta:
+        model = Search
+        fields = ('source', 'destination', 'date', 'time',)

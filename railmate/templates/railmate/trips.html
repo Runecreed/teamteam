@@ -5,7 +5,12 @@
 {% block trips %}
     <p>Available stations:</p>
     <br>
-    {% for key, value in search_results.items %}
-        <p>{{ key }} {{ value }} .</p>
+    {% for trip in trips %}
+        <div class="col-xs-6">
+            <div class="trip-card">
+                <p>{{ trip.source }} - {{ trip.destination }} <br> {{ trip.time }}</p>
+                <p>{{ trip.date }}</p>
+            </div>
+        </div>
     {% endfor %}
 {% endblock %}

@@ -23,6 +23,14 @@ class Trip(models.Model):
     max_companions = models.IntegerField(verbose_name="Total amount of extra passengers allowed",
                                          default=4)  # amount of people allowed with
 
+
+class Search(models.Model):
+    source = models.TextField()
+    destination = models.TextField()
+    date = models.DateField()
+    time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+
+
     def space_left(self):
         if (self.companions >= self.max_companions):
             return False
