@@ -14,6 +14,7 @@
             {# Every Trip should be submittable #}
             <form method='POST' action='/createTrip/'>
             <input type="hidden" value="{{ fromStation }}" name="fromStation">
+            <input type="hidden" value="{{ station_list }}" name="station_list">
             <input type="hidden" value="{{  toStation }}" name="toStation">
             <input type="hidden" value="{{  subscription }}" name="subscription">
             <input type="hidden" value="{{  compensation }}" name="compensation">

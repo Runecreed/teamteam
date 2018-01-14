@@ -3,9 +3,27 @@
 {% extends "railmate/index.html" %}
 
 {% block content %}
-    <p>Available stations:</p>
+    <p>Possible trips for this search</p>
+    <p>The following results cover the trajectory needed to go to </p>
+    <p>{{  search.destination }}</p>
+    <p>from </p>
+    <p>{{ search.source }} </p>
+    <p> On  {{ search.date }}</p>
     <br>
-    {% for key, value in search_results.items %}
-        <p>{{ key }} {{ value }} .</p>
+    {% for result in search_results %}
+
+        <p>Username: {{ result.user }} </p>
+        <p>Compensation: {{ result.compensation }} </p>
+        <p>Subscription: {{ result.subscription }} </p>
+        <p>People coming along: {{ result.companions }} </p>
+        <p>Total space: {{ result.max_companions }} </p>
+        <p>Start Time: {{ result.datetime }} </p>
+        <p>Arrival Time: {{ result.datetime_end }} </p>
+        <p>Trip Number: {{ result.tripnumber }} </p>
+
+        <br>
+
+
     {% endfor %}
+
 {% endblock %}

@@ -1,6 +1,7 @@
 from datetime import date, datetime, time
 
 from django.utils import dateparse
+from django.core import serializers
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -16,6 +17,7 @@ from django.shortcuts import render, redirect
 from railmate.forms import ProfileForm, UserForm, MessageForm, TripForm
 from railmate.models import Profile, Message, Trip
 from railmate.services import NS, MessagingService
+import json
 
 
 def home(request):
@@ -82,6 +84,11 @@ def create_trip(request):
         companions = 0
         max_companions = 3
 
+        # get the station list
+        station_list = request.POST.get('station_list')
+        # store it as a JSON string
+        station_list = json.dumps(station_list)
+
         formData = {'user': user,
                     'source': source,
                     'destination': destination,
@@ -93,6 +100,7 @@ def create_trip(request):
                     'deviation': deviation,
                     'companions': companions,
                     'max_companions': max_companions,
+                    'station_list': station_list,
                     }
         tripform = TripForm(formData)
 
@@ -110,16 +118,36 @@ def home_search(request):
     source = request.GET.get('source', '')
     destination = request.GET.get('destination', '')
     date = request.GET.get('date', '')
-    recurrence = request.GET.get('recurrence', '')
-    deviation = request.GET.get('deviation', '')
     time = request.GET.get('time', '')
+    if date:
+        date_object = datetime.strptime(date, '%Y-%m-%d').date()
+    else:
+        date_object = datetime.date(datetime.now())  # just use today if no date input
 
-    search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence,
-              'deviation': deviation, 'time': time}
-    results = 'Not implemented yet'
+    search = {'source': source, 'destination': destination, 'date': str(date_object)}
+    actual_query = dict((k, v) for k, v in search.items() if v)  # Non-empty searches only
+
+    # query = dict((k, v) for k, v in search.items() if v)
+
+    # get candidates
+    candidates = Trip.objects.filter(destination=destination,
+                                     datetime_end__day=date_object.day,
+                                     datetime_end__month=date_object.month,
+                                     datetime_end__year=date_object.year)
+
+    # a candidate is not OK if it does not visit the source station, so filter again on source compared to the list
+
+
+    proper_results = []
+    for result in candidates:
+        # decode station list
+        station_list = json.loads(result.station_list)  # this should now be a list representation - it isn't though, for some reason
+        if (source in station_list):
+            proper_results.append(result)       # this one is valid
+
     # return results
     form = NS().station_list()
-    return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
+    return render(request, 'railmate/trips.html', {'form': form, 'search_results': proper_results, 'search': actual_query})
 
 
 # User presses POST button to create a trip

@@ -50,5 +50,6 @@ class TripForm(forms.ModelForm):
                   'subscription',
                   'deviation',
                   'companions',
-                  'max_companions'
+                  'max_companions',
+                  'station_list',
                   }

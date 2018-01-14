@@ -19,6 +19,8 @@ class Trip(models.Model):
     datetime_end = models.DateTimeField()
     tripnumber = models.IntegerField()
 
+    station_list = models.TextField(null=False, blank=False)
+
     # time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
     # time_end = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
 
