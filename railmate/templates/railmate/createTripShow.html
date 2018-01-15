@@ -61,15 +61,15 @@
                                             <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
                                             <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
                                             {# keep track of the data in this form for selection postin later #}
-                                            <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>
-                                            <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>
-                                            <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>
+{#                                            <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>#}
+{#                                            <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>#}
+{#                                            <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>#}
                                         {% endfor %}
 
                                     {% else %}
                                         {# Just normal key value pairs #}
                                         <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
-                                        <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>
+{#                                        <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
                                         {# keep track of the data in this form for selection postin later #}
 
                                     {% endif %}
@@ -108,7 +108,7 @@
                                         {% else %}
                                             {# Just normal key value pairs #}
                                             <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
-                                            {#  <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
+{#                                              <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
                                             {# keep track of the data in this form for selection postin later #}
 
                                         {% endif %}
