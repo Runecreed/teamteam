@@ -31,17 +31,20 @@
 
                             {% elif tripinfo == 'GeplandeReisTijd' %}
                                 <div class="col-xs-6">Travel Time: {{ tripvalue }}</div>
+                                <input type='hidden' value='{{ tripvalue }}' name='{{ tripinfo }}'>
 
                             {% elif tripinfo == 'ActueleVertrekTijd' %}
                                 <div class="col-xs-6"> Departure day: {{ tripvalue|dateOnly }}</div>
                                 <div class="col-xs-6"> Departure time: {{ tripvalue|timeOnly }}</div>
+                                <input type='hidden' value='{{ tripvalue }}' name='{{ tripinfo }}'>
 
                             {% elif tripinfo == 'GeplandeAankomstTijd' %}
+                                <input type='hidden' value='{{ tripvalue }}' name='{{ tripinfo }}'>
                                 <div class="col-xs-6">Estimated Arrival Time: {{ tripvalue|timeOnly }}</div>
-
 
                             {% elif tripinfo == 'AantalOverstappen' %}
                                 <div class="col-xs-6">Transfers: {{ tripvalue }}</div>
+                                <input type='hidden' value='{{ tripvalue }}' name='{{ tripinfo }}'>
                             {% elif  tripinfo == 'ReisDeel' and tripvalue|isDict %}
                                 {# This is hacky as hell, you dont want to do type checking in a template #}
                                 {# the entry called 'ReisDeel' is a dict, expand it  as dict#}
@@ -61,15 +64,15 @@
                                             <input type='hidden' value='{{ trainstops.Tijd }}' name='ReisStop-Tijd'>
                                             <input type='hidden' value='{{ trainstops.Spoor }}' name='ReisStop-Spoor'>
                                             {# keep track of the data in this form for selection postin later #}
-{#                                            <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>#}
-{#                                            <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>#}
-{#                                            <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>#}
+                                            {#                                            <p>Name: {{ trainstops.Naam|default:"Unknown" }} </p>#}
+                                            {#                                            <p>Time: {{ trainstops.Tijd|default:"Unknown at this time" }} </p>#}
+                                            {#                                            <p>Track: {{ trainstops.Spoor|default:"Unknown at this time" }} </p>#}
                                         {% endfor %}
 
                                     {% else %}
                                         {# Just normal key value pairs #}
                                         <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
-{#                                        <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
+                                        {#                                        <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
                                         {# keep track of the data in this form for selection postin later #}
 
                                     {% endif %}
@@ -77,17 +80,16 @@
                             {% elif  tripinfo == 'ReisDeel' %}
                                 {# expand it as list instead, the code block above does the same but for a dict #}
 
-
                                 {% for trip in tripvalue %}
 
                                     {% for reisdeelkey, reisdeelvalue in trip.items %}
 
-{#                                        {% if reisdeelkey == 'RitNummer' %}#}
-{##}
-{#                                            <div class="col-xs-6">Trip Number: {{ reisdeelvalue }}</div>#}
+                                        {#                                        {% if reisdeelkey == 'RitNummer' %}#}
+                                        {##}
+                                        {#                                            <div class="col-xs-6">Trip Number: {{ reisdeelvalue }}</div>#}
                                         {% if reisdeelkey == 'Reisdetails' %}
                                             {# Ignore this part, too much info #}
-
+                                            <input type='hidden' value='{{ reisdeelkey }}' name='{{ reisdeelvalue }}'>
                                         {% elif reisdeelkey == 'ReisStop' %}
                                             {# ReisStop is a list.... report elements #}
                                             {# <p>Trajectory Information of this part of the trip </p> #}
@@ -108,7 +110,7 @@
                                         {% else %}
                                             {# Just normal key value pairs #}
                                             <input type='hidden' value='{{ reisdeelvalue }}' name='{{ reisdeelkey }}'>
-{#                                              <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
+                                            {#                                              <p>{{ reisdeelkey }} -- {{ reisdeelvalue }} </p>#}
                                             {# keep track of the data in this form for selection postin later #}
 
                                         {% endif %}
@@ -121,9 +123,6 @@
                                 {#  <p>{{ tripinfo }} {{ tripvalue }} .</p>#}
                             {% endif %}
                         {% endfor %}
-
-
-
 
 
 
