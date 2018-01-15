@@ -42,7 +42,7 @@
     min-height: 40px;
 }
 
-.trip-card{
+.trip-card {
     background-color: #FFFFFF;
     padding: 5px;
     border-radius: 5px;
@@ -54,8 +54,22 @@
     border-radius: 5px;
 }
 
-.coversation_list {
+.selector {
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 1px 1px lightgray inset;
+    padding: 10px 12px;
+}
 
+.transparent{
+    background-color: transparent;
+}
+
+.contactlist{
+    background: #e1e1e1;
+    box-shadow:1px 1px 2px 2px lightgray inset;
+}
+
+.coversation_list {
     max-height: 50vh;
     overflow: hidden;
     overflow-y: scroll;
@@ -89,7 +103,6 @@
     border-top-right-radius: 10px;
     border-color: transparent;
 }
-
 
 .list-item {
     margin-top: 20px
