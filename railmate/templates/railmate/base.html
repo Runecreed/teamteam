@@ -29,7 +29,7 @@
         <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
             <div class="col-xs-4 col-sm-12 text-right"><a href="{% url 'account' %}">Account <span class="glyphicon glyphicon-user"></span></a></div>
-            <div class="col-xs-4 col-sm-12 text-right"><a href="{% url 'messages' %}">Messages <span class="glyphicon glyphicon-comment"></span></a></div>
+            <div class="col-xs-4 col-sm-12 text-right"><a href="{% url 'messages' %}">Messages <span class="glyphicon glyphicon-comment {% if unread %}glyphicon-bell red{% endif %}"></span></a></div>
             <div class="col-xs-4 col-sm-12 text-right"><a href="{% url 'logout' %}">Logout <span class="glyphicon glyphicon-log-out"></span></a></div>
             {% else %}
             <div class="col-xs-6 col-sm-12 text-right"><a href="{% url 'signup' %}">Signup <span class="glyphicon glyphicon-user"></span></a></div>

@@ -174,8 +174,8 @@ def home_search(request):
     form = NS().station_list()
     # return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
     trips = Trip.objects.all().filter(Q(source=source))
-    return render(request, 'railmate/trips.html', {'form': form, 'trips': trips, 'search_results': proper_results, 'search': actual_query})
-
+    return render(request, 'railmate/trips.html',
+                  {'form': form, 'trips': trips, 'search_results': proper_results, 'search': actual_query})
 
 
 # User presses POST button to create a trip
@@ -193,7 +193,8 @@ def home_search(request):
 
 
 def user_page(request, user_id):
-        return HttpResponse("You're looking at user %s." % user_id)
+    return HttpResponse("You're looking at user %s." % user_id)
+
 
 def login_user(request):
     logout(request)
@@ -247,15 +248,15 @@ def editAccount(request):
     return render(request, 'railmate/editacount.html', {
         'user_form': user_form,
         'profile_form': profile_form,
-        'avatar':profile
+        'avatar': profile
     })
 
 
 @login_required
 def account(request):
-    ride_along = Fellow_passengers.objects.filter(user= request.user)
+    ride_along = Fellow_passengers.objects.filter(user=request.user)
     contacts = Profile.objects.all()
-    #passengers moet lijst met user waarme je in een conversatie zit
+    # passengers moet lijst met user waarme je in een conversatie zit
     trip_info = Trip.objects.filter(user=request.user, datetime__gte=datetime.now()).order_by('datetime')
     trip_history = Trip.objects.filter(user=request.user).order_by('datetime').exclude(datetime__gte=datetime.now())
     trip_info_history = Trip.objects.filter(user=request.user).order_by('-datetime')
@@ -264,7 +265,9 @@ def account(request):
         user_info.age = '-'
     else:
         user_info.age = calculate_age(user_info.birth_date)
-    return render(request, 'railmate/account.html', {'user_info': user_info,'trip_info': trip_info,'contacts':contacts,'trip_history':trip_history,'ride_along':ride_along})
+    return render(request, 'railmate/account.html',
+                  {'user_info': user_info, 'trip_info': trip_info, 'contacts': contacts, 'trip_history': trip_history,
+                   'ride_along': ride_along})
 
 
 def calculate_age(born):
@@ -279,27 +282,36 @@ def logout(request):
 
 def messages(request):
     user = request.user
-    global recipient
+
     # conversation = Message.objects.get(user=request.user)
     conversations = MessagingService().get_conversations(user)
     unread = MessagingService().get_unread_messages(user)
 
-    if not conversations:
-        conversations = "No contacts made yet"
+    if 'recipient_name' in request.session:
+        recipient = User.objects.get(username=request.session['recipient_name'])
+    else:
+        try:
+            recipient = conversations[0]
+        except IndexError:
+            recipient = ''
 
-    try:
-        recipient
-    except NameError:
-        recipient = conversations[0]
-
-    conversation = MessagingService().get_conversation(user, recipient)
+    if recipient != '':
+        conversation = MessagingService().get_conversation(user, recipient)
+    else:
+        conversation = []
 
     if request.method == 'POST' and request.POST.get("select"):
         recipient_name = request.POST['select']
-        message_form = MessageForm(instance=request.user)
         recipient = User.objects.get(username=recipient_name)
+        message_form = MessageForm(instance=request.user)
         conversation = MessagingService().get_conversation(user, recipient, '', False, True)
-
+        request.session['recipient_name'] = recipient_name
+    elif request.method == 'POST' and request.POST.get("select2"):
+        recipient_name = request.POST['select2']
+        recipient = User.objects.get(username=recipient_name)
+        message_form = MessageForm(instance=request.user)
+        conversation = MessagingService().get_conversation(user, recipient, '', False, True)
+        request.session['recipient_name'] = recipient_name
     elif request.method == 'POST' and request.POST.get("send_message", "") == 'send_message':
         message_form = MessageForm(request.POST)
         if message_form.is_valid():
@@ -317,25 +329,26 @@ def messages(request):
     })
 
 
-def trip_edit(request,trip_id):
+def trip_edit(request, trip_id):
     trip_info = Trip.objects.get(pk=trip_id)
     return render(request, 'railmate/edit_trip.html', {'trip_info': trip_info})
 
 
-def trip_delete(request,trip_id):
+def trip_delete(request, trip_id):
     trip_info = Trip.objects.get(pk=trip_id)
     if trip_info.user == request.user:
         trip_info.delete()
     return redirect(account)
 
 
-def add_passenger(request,trip_id):
+def add_passenger(request, trip_id):
     user_id = request.POST['passanger']
     trip_info = Trip.objects.get(pk=trip_id)
     if trip_info.user == request.user and trip_info.fellow_passengers_set.count() < 4:
-        new_passenger = Fellow_passengers.objects.create(trip_id = trip_info, user = User.objects.get(pk=user_id))
+        new_passenger = Fellow_passengers.objects.create(trip_id=trip_info, user=User.objects.get(pk=user_id))
         new_passenger.save()
     return redirect(account)
+
 
 def remove_passenger(request, passenger_id):
     passenger = Fellow_passengers.objects.get(pk=passenger_id)

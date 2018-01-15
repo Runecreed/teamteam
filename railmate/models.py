@@ -15,7 +15,7 @@ class Trip(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Reference user table
     source = models.TextField()
     destination = models.TextField()
-    datetime = models.DateTimeField()       # ISO8601 formatted DateTime field
+    datetime = models.DateTimeField()  # ISO8601 formatted DateTime field
     datetime_end = models.DateTimeField()
     tripnumber = models.IntegerField()
 
@@ -39,7 +39,6 @@ class Search(models.Model):
     date = models.DateField()
     time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
 
-
     def space_left(self):
         if (self.companions >= self.max_companions):
             return False
@@ -49,7 +48,8 @@ class Search(models.Model):
     def __str__(self):  # verbose reporting of this entry
         # return str(self.user) + ' travels from ' + self.source + ' to ' + self.destination + ' on ' + \
         #        self.date.strftime('%d/%m/%y') + ' at ' + self.time + ' with ' + str(self.companions) + ' passengers'
-        return str(self.user) + ' --- Tripnumber: ' + str(self.tripnumber) + ' starting station: '+ self.source + " endStation " + self.destination + ' || extra passengers: ' + str(
+        return str(self.user) + ' --- Tripnumber: ' + str(
+            self.tripnumber) + ' starting station: ' + self.source + " endStation " + self.destination + ' || extra passengers: ' + str(
             self.companions)
 
 

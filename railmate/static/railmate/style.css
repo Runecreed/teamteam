@@ -26,6 +26,10 @@
     margin: 10px;
 }
 
+.red{
+    color: #ff4f1b;
+}
+
 .top-bottom-margin {
     margin-bottom: 10px;
     margin-top: 10px;
@@ -38,6 +42,14 @@
     border-radius: 5px;
 }
 
+.contactlist-divider {
+    background-color: #EEEEEE;
+    padding: 5px;
+    border-radius: 0;
+    box-shadow: 0 3px 0 0 lightgray;
+    margin-bottom: 0;
+}
+
 .card-title {
     min-height: 40px;
 }
@@ -48,10 +60,16 @@
     border-radius: 5px;
 }
 
-.ridealong-card{
+.ridealong-card {
 
     padding: 5px;
     border-radius: 5px;
+}
+
+.unread {
+    background-color: #F3CA3C;
+    box-shadow: 1px 1px 1px 1px lightgray inset;
+    padding: 0;
 }
 
 .selector {
@@ -60,13 +78,16 @@
     padding: 10px 12px;
 }
 
-.transparent{
+.transparent {
     background-color: transparent;
 }
 
-.contactlist{
+.contactlist {
     background: #e1e1e1;
-    box-shadow:1px 1px 2px 2px lightgray inset;
+    box-shadow: 1px 1px 2px 2px lightgray inset;
+    max-height: 50vh;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .coversation_list {
