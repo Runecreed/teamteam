@@ -28,7 +28,7 @@ $(document).ready(function(){
                 </div>
                 <div class="col-xs-7">
                     <p>{{ user_info.user }}</p>
-                    <p>{{ user_info.email }}</p>
+
                     <p>{{ user_info.age }}</p>
                 </div>
                 <div class="col-xs-7"><a href="{% url 'edit' %}">Edit <span class="glyphicon glyphicon-edit"></span></a></div>
@@ -131,7 +131,7 @@ $(document).ready(function(){
                                             <div class="col-xs-1"></div>
                                             <div class="col-xs-7"><strong>{{ trip.datetime.timetz}} - {{ trip.datetime_end.timetz}}</strong></div>
                                             <div class="col-xs-1">
-                                                <a href="{% url 'trip_edit' trip.pk %}" ><span class="glyphicon glyphicon-edit"></span></a>
+
                                             </div>
                                             <div class="col-xs-1">
                                             <a href="{% url 'trip_delete' trip.pk %}" ><span class="glyphicon glyphicon-remove" ></span></a>

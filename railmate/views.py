@@ -171,7 +171,7 @@ def home_search(request):
             proper_results.append(result)  # this one is valid
 
     if request.method == 'POST' and request.POST.get("make_contact"):
-        recipient_name = request.POST['recipient']
+        recipient_name = request.POST['make_contact']
         recipient = User.objects.get(username=recipient_name)
         content = "Hello, I would like to join your trip."
         MessagingService().send_message(request.user, recipient, content)

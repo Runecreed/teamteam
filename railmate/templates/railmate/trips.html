@@ -3,35 +3,49 @@
 {% extends "railmate/index.html" %}
 
 {% block content %}
-    <p>Possible trips for this search</p>
-    <p>The following results cover the trajectory needed to go to </p>
-    <p>{{  search.destination }}</p>
+<div class="card-background">
+       <h4>Possible trips for this search</h4><br>
+
+    <p>The following results cover the trajectory needed to go to </p><br>
+
+  <p>{{  search.destination }}</p>
     <p>from </p>
     <p>{{ search.source }} </p>
     <p> On  {{ search.date }}</p>
-    <br>
+
+    <br></div><br><br>
+    {% if trips %}
     {% for trip in trips %}
-        <div class="col-xs-6">
-            <div class="trip-card">
-                <p>{{ trip.source }} - {{ trip.destination }} <br> {{ trip.time }}</p>
-                <p>{{ trip.date }}</p>
+        <form method="post" action="">
+        {% csrf_token %}
+        <div class="row card-background">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="row card-background">
+                    <div class="col-xs-6">{{ trip.source }} - {{ trip.destination }}</div> <div class="col-xs-6">{{ trip.time }}</div>
+                    <div class="col-xs-6">{{ trip.datetime }}</div><div class="col-xs-6"></div>
+                    <input type="hidden" value="{{ trip.user }}" name="make_contact">
+                    <div class="col-xs-6">{% if user.is_authenticated %}<input type="submit" name='Button' value="Send message">{% else  %}<a href="/login/" >You have to login or register</a>{%endif  %}</div>
+                </div>
             </div>
         </div>
+    </form>
     {% endfor %}
+    {% else %}
+        <h3>There are no search results</h3>
+    {% endif %}
     {% for result in search_results %}
-     <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8">
-        <div class="row card-background">
+<!--
         <div class="col-xs-6"><p>Username: {{ result.user }} </p></div>
-        <div class="col-xs-6"> <p>Compensation: {{ result.compensation }} </p>
-         <div class="col-xs-6"><p>Subscription: {{ result.subscription }} </p>
-        <div class="col-xs-6"> <p>People coming along: {{ result.companions }} </p>
-        <p>Total space: {{ result.max_companions }} </p>
-        <p>Start Time: {{ result.datetime }} </p>
-        <p>Arrival Time: {{ result.datetime_end }} </p>
-        <p>Trip Number: {{ result.tripnumber }} </p>
+        <div class="col-xs-6"> <p>Compensation: {{ result.compensation }} </p></div>
+         <div class="col-xs-6"><p>Subscription: {{ result.subscription }} </p></div>
+        <div class="col-xs-6"> <p>People coming along: {{ result.companions }} </p></div>
+        <div class="col-xs-6"><p>Total space: {{ result.max_companions }} </p></div>
+        <div class="col-xs-6"><p>Start Time: {{ result.datetime }} </p></div>
+       <div class="col-xs-6"><p>Arrival Time: {{ result.datetime_end }} </p></div>
+        <div class="col-xs-6"><p>Trip Number: {{ result.tripnumber }} </p></div>
 
+-->
         <br>
 
 
