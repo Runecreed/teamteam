@@ -170,6 +170,13 @@ def home_search(request):
         if (source in station_list):
             proper_results.append(result)  # this one is valid
 
+    if request.method == 'POST' and request.POST.get("make_contact"):
+        recipient_name = request.POST['recipient']
+        recipient = User.objects.get(username=recipient_name)
+        content = "Hello, I would like to join your trip."
+        MessagingService().send_message(request.user, recipient, content)
+        return redirect('/messages')
+
     # return results
     form = NS().station_list()
     # return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
