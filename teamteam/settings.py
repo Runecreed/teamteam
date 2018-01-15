@@ -25,7 +25,7 @@ SECRET_KEY = 'qjmoitsy0szde2d&z%#l49!*77ml_^_uzupr3rcr(&=29#405%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'travelmate.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'travelmate.pythonanywhere.com', 'sjors.org']
 
 
 # Application definition

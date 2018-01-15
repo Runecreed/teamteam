@@ -1,4 +1,6 @@
 from django import template
+from django.utils import dateparse
+from datetime import date, datetime, time
 
 register = template.Library()
 
@@ -14,3 +16,13 @@ def isDict(value):
         return True
     else:
         return False
+
+
+@register.filter
+def dateOnly(value):
+    return value[0:10]
+
+
+@register.filter
+def timeOnly(value):
+    return value[11:16]
