@@ -18,13 +18,14 @@ class NS:
     _password = 'EyccWJlIkL27BLh3On8zrRMiie_Z3r-WQAjDaZMBA93sD15cEAWT7A'
 
     def station_list(self):
+        station_list = []
         API = 'http://webservices.ns.nl/ns-api-stations-v2?'
 
         data = requests.get(API, auth=HTTPBasicAuth(self._username, self._password))  # response is in XML format
+        if not data:
+            return station_list
+
         root = ET.fromstring(data.content)  # obtain XML format and store in variable to parse
-
-        station_list = []
-
         for station in root:
             code = station.find('Code').text
             station_name = station.find('Namen/Lang').text
@@ -171,9 +172,7 @@ class MessagingService(object):
             order = '-pk'
         else:
             order = 'pk'
-
         conversation = Message.objects.all().filter(sender__in=users, recipient__in=users).order_by(order)
-
         if limit:
             # Limit number of messages to the x newest
             conversation = conversation[:limit]
