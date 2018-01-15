@@ -256,9 +256,9 @@ def account(request):
     ride_along = Fellow_passengers.objects.filter(user= request.user)
     contacts = Profile.objects.all()
     #passengers moet lijst met user waarme je in een conversatie zit
-    trip_info = Trip.objects.filter(user=request.user, datetime__gte=date.today()).order_by('date')
-    trip_history = Trip.objects.filter(user=request.user).order_by('-date').exclude(datetime__gte=date.today())
-    trip_info_history = Trip.objects.filter(user=request.user).order_by('-date')
+    trip_info = Trip.objects.filter(user=request.user, datetime__gte=datetime.now()).order_by('datetime')
+    trip_history = Trip.objects.filter(user=request.user).order_by('datetime').exclude(datetime__gte=datetime.now())
+    trip_info_history = Trip.objects.filter(user=request.user).order_by('-datetime')
     user_info = Profile.objects.get(user=request.user)
     if user_info.birth_date is None:
         user_info.age = '-'

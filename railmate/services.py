@@ -171,9 +171,7 @@ class MessagingService(object):
             order = '-pk'
         else:
             order = 'pk'
-
         conversation = Message.objects.all().filter(sender__in=users, recipient__in=users).order_by(order)
-
         if limit:
             # Limit number of messages to the x newest
             conversation = conversation[:limit]
