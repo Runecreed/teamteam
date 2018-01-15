@@ -3,7 +3,20 @@
     <div class="card-background text-center">
     <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    <div class="row">
+        <div class="col-xs-11 col-sm-8 center-block">
+            <div class="row text-left">
+                <div class="col-xs-8">
+                    {{ profile_form.avatar }}
+                </div>
+                <div class="col-xs-4">
+                    <img width="100" src="{% if profile.avatar %}/media/{{ profile.avatar }}{% else %}/static/railmate/default_avatar.png{% endif %}"/>
+                </div>
+            </div>
+        </div>
+    </div>
     {% for field in profile_form %}
+
       <p>{{ field.label_tag }}
         <br>
         {{ field }}
@@ -12,7 +25,9 @@
         {% endfor %}
         </p>
         <br>
+
     {% endfor %}
+
 
 
         <div class="control-group">

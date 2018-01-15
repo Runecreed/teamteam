@@ -29,4 +29,8 @@ urlpatterns = [
     path('edit/', views.editAccount, name='edit'),
     path('messages/', views.messages, name='messages'),
     path('logout/', views.logout, name='logout'),
+    path('trip_edit/<int:trip_id>/', views.trip_edit, name='trip_edit'),
+    path('trip_delete/<int:trip_id>/', views.trip_delete, name='trip_delete'),
+    path('add_passenger/<int:trip_id>', views.add_passenger, name='add_passenger'),
+    path('remove_passenger/<int:passenger_id>', views.remove_passenger, name='remove_passenger')
 ]

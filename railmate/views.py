@@ -2,6 +2,7 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, Template, loader, RequestContext
@@ -12,7 +13,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 from railmate.forms import ProfileForm, UserForm, MessageForm
-from railmate.models import Profile, Message
+from railmate.models import Profile, Message, Trip, Fellow_passengers
 from railmate.services import NS, MessagingService
 
 
@@ -126,22 +127,30 @@ def editAccount(request):
         else:
             messages.error(request, ('Please correct the error below.'))
     else:
+        profile = Profile.objects.filter(user=request.user)
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request, 'railmate/editacount.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'avatar':profile
     })
 
 
 @login_required
 def account(request):
+    ride_along = Fellow_passengers.objects.filter(user= request.user)
+    contacts = Profile.objects.all()
+    #passengers moet lijst met user waarme je in een conversatie zit
+    trip_info = Trip.objects.filter(user=request.user,date__gte=date.today()).order_by('date')
+    trip_history = Trip.objects.filter(user=request.user).order_by('-date').exclude(date__gte=date.today())
+    trip_info_history = Trip.objects.filter(user=request.user).order_by('-date')
     user_info = Profile.objects.get(user=request.user)
     if user_info.birth_date is None:
         user_info.age = '-'
     else:
         user_info.age = calculate_age(user_info.birth_date)
-    return render(request, 'railmate/account.html', {'user_info': user_info})
+    return render(request, 'railmate/account.html', {'user_info': user_info,'trip_info': trip_info,'contacts':contacts,'trip_history':trip_history,'ride_along':ride_along})
 
 
 def calculate_age(born):
@@ -169,3 +178,25 @@ def messages(request):
         # 'messages': conversation,
         'message_form': message_form
     })
+def trip_edit(request,trip_id):
+    trip_info = Trip.objects.get(pk=trip_id)
+    return render(request, 'railmate/edit_trip.html', {'trip_info': trip_info})
+def trip_delete(request,trip_id):
+    trip_info = Trip.objects.get(pk=trip_id)
+    if trip_info.user == request.user:
+        trip_info.delete()
+    return redirect(account)
+def add_passenger(request,trip_id):
+    user_id = request.POST['passanger']
+    trip_info = Trip.objects.get(pk=trip_id)
+    if trip_info.user == request.user and trip_info.fellow_passengers_set.count() < 4:
+        new_passenger = Fellow_passengers.objects.create(trip_id = trip_info, user = User.objects.get(pk=user_id))
+        new_passenger.save()
+
+    return redirect(account)
+
+def remove_passenger(request, passenger_id):
+    passenger = Fellow_passengers.objects.get(pk=passenger_id)
+    if passenger.trip_id.user == request.user:
+        passenger.delete()
+    return redirect(account)
