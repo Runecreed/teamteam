@@ -125,9 +125,9 @@ def create_trip(request):
 
         if tripform.is_valid():
             tripform.save()
-            return HttpResponse('VALID FORM! Should be posted now')
+            return redirect("/")
         else:
-            return HttpResponse('INVALID FORM! NOO')
+            return HttpResponse('Something went wrong. go back to the home page and try again')
 
 
 # User filled in the form and presses Search
