@@ -38,7 +38,7 @@
     border-radius: 5px;
 }
 
-.card-title{
+.card-title {
     min-height: 40px;
 }
 
@@ -47,11 +47,36 @@
     padding: 5px;
     border-radius: 5px;
 }
+
 .ridealong-card{
 
     padding: 5px;
     border-radius: 5px;
 }
+
+.coversation_list {
+
+    max-height: 50vh;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.message-card {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 5px;
+}
+
+.message-card2 {
+    display: inline-block;
+    background-color: #c0e0ff;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 5px;
+}
+
 .tab-background {
     background-color: #F3CA3C;
     padding: 5px;

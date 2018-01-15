@@ -15,8 +15,15 @@ class Trip(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Reference user table
     source = models.TextField()
     destination = models.TextField()
-    date = models.DateField()
-    time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+    datetime = models.DateTimeField()       # ISO8601 formatted DateTime field
+    datetime_end = models.DateTimeField()
+    tripnumber = models.IntegerField()
+
+    station_list = models.TextField(null=False, blank=False)
+
+    # time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+    # time_end = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+
     deviation = models.IntegerField(blank=True,
                                     null=True)  # possible deviation, not required and stored as NULL if not given
     subscription = models.TextField()
@@ -24,6 +31,14 @@ class Trip(models.Model):
     companions = models.IntegerField(verbose_name="Amount of Passengers coming with", default=0)
     max_companions = models.IntegerField(verbose_name="Total amount of extra passengers allowed",
                                          default=4)  # amount of people allowed with
+
+
+class Search(models.Model):
+    source = models.TextField()
+    destination = models.TextField()
+    date = models.DateField()
+    time = models.CharField(max_length=5)  # store hh:mm timestamp, parse later into DateTime object if need be
+
 
     def space_left(self):
         if (self.companions >= self.max_companions):
@@ -34,7 +49,7 @@ class Trip(models.Model):
     def __str__(self):  # verbose reporting of this entry
         # return str(self.user) + ' travels from ' + self.source + ' to ' + self.destination + ' on ' + \
         #        self.date.strftime('%d/%m/%y') + ' at ' + self.time + ' with ' + str(self.companions) + ' passengers'
-        return str(self.user) + ': ' + self.source + " --> " + self.destination + ' || passengers: ' + str(
+        return str(self.user) + ' --- Tripnumber: ' + str(self.tripnumber) + ' starting station: '+ self.source + " endStation " + self.destination + ' || extra passengers: ' + str(
             self.companions)
 
 
