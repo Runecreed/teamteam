@@ -19,11 +19,14 @@
         </div>
     {% endfor %}
     {% for result in search_results %}
-
-        <p>Username: {{ result.user }} </p>
-        <p>Compensation: {{ result.compensation }} </p>
-        <p>Subscription: {{ result.subscription }} </p>
-        <p>People coming along: {{ result.companions }} </p>
+     <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div class="row card-background">
+        <div class="col-xs-6"><p>Username: {{ result.user }} </p></div>
+        <div class="col-xs-6"> <p>Compensation: {{ result.compensation }} </p>
+         <div class="col-xs-6"><p>Subscription: {{ result.subscription }} </p>
+        <div class="col-xs-6"> <p>People coming along: {{ result.companions }} </p>
         <p>Total space: {{ result.max_companions }} </p>
         <p>Start Time: {{ result.datetime }} </p>
         <p>Arrival Time: {{ result.datetime_end }} </p>

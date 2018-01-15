@@ -107,7 +107,6 @@ $(document).ready(function(){
                             <div class="col-xs-12 col-sm-offset-1 col-sm-7"><h3><strong>Upcoming trips</strong></h3></div>
                         {% endif %}
                         {% for trip in trip_info %}
-
                             {% ifchanged trip.datetime.day %}
                                 </ul><ul class="list-unstyled row"><div class="col-xs-12 col-sm-offset-1 col-sm-7"><h4><strong> {{trip.datetime.day}}-{{trip.datetime.month}}-{{trip.datetime.year}}</strong></h4></div>
                             {% endifchanged %}
@@ -183,7 +182,7 @@ $(document).ready(function(){
                         <!-- content of my history-->
 
                         {% for history in trip_history %}
-                           % for ride in ride_along %}
+
                             {% ifchanged ride.trip_id.datetime.day %}
                                 </ul><ul class="list-unstyled row"><div class="col-xs-12 col-sm-offset-1 col-sm-7"><h5><strong> {{history.datetime.day}}-{{history.datetime.month}}-{{history.datetime.year}}</strong></h5></div>
                             {% endifchanged %}

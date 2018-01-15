@@ -4,29 +4,30 @@
     <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row">
-        <div class="col-xs-11 col-sm-8 center-block">
-            <div class="row text-left">
+        <div class="col-xs-1 col-sm-2"></div>
+        <div class="col-xs-10 col-sm-8">
+            <div class="row text-left">   <h4><strong>Edit profile page</strong> </h4>
                 <div class="col-xs-8">
-                    {{ profile_form.avatar }}
-                </div>
-                <div class="col-xs-4">
+                    {% for field in profile_form %}
+                        {{ field.label_tag }}<br>
+
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+
+                        <br>
+                    {% endfor %}
+                    </div>
+
+                <div class="col-sm-4">
                     <img width="100" src="{% if profile.avatar %}/media/{{ profile.avatar }}{% else %}/static/railmate/default_avatar.png{% endif %}"/>
                 </div>
             </div>
+        <br><br>
         </div>
     </div>
-    {% for field in profile_form %}
 
-      <p>{{ field.label_tag }}
-        <br>
-        {{ field }}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-        </p>
-        <br>
-
-    {% endfor %}
 
 
 
