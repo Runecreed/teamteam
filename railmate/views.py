@@ -125,9 +125,9 @@ def create_trip(request):
 
         if tripform.is_valid():
             tripform.save()
-            return HttpResponse('VALID FORM! Should be posted now')
+            return redirect("/")
         else:
-            return HttpResponse('INVALID FORM! NOO')
+            return HttpResponse('Something went wrong. go back to the home page and try again')
 
 
 # User filled in the form and presses Search
@@ -169,6 +169,13 @@ def home_search(request):
             result.station_list)  # this should now be a list representation - it isn't though, for some reason
         if (source in station_list):
             proper_results.append(result)  # this one is valid
+
+    if request.method == 'POST' and request.POST.get("make_contact"):
+        recipient_name = request.POST['make_contact']
+        recipient = User.objects.get(username=recipient_name)
+        content = "Hello, I would like to join your trip."
+        MessagingService().send_message(request.user, recipient, content)
+        return redirect('/messages')
 
     # return results
     form = NS().station_list()
