@@ -70,6 +70,9 @@ class NS:
         return {'trips': jsonData["ReisMogelijkheid"],
                 'station_intermediate': list}  # returns a list of possible trips that go from source to destination, with a lot of info
 
+
+
+
 class MessagingService(object):
     """
     A object to manage all messages and conversations

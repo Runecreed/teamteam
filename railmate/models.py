@@ -61,6 +61,9 @@ class Profile(models.Model):
 
 
 # AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+class Fellow_passengers(models.Model):
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Message(models.Model):
