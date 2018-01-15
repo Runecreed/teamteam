@@ -7,25 +7,25 @@
                     <h5>Unread</h5>
                     {% for msg in unread %}
                         <div class="">
-                            <h6>{{ msg }}</h6>
+                            <h6>{{ msg.sender }}</h6>
                         </div>
                     {% endfor %}
                 {% endif %}
                 <h4>Conversations</h4>
-                <div class="list-unstyled">
+                <div class="list-unstyled contactlist">
                     <form method="post">
                         {% csrf_token %}
                         {% for contact in conversations %}
-                            <div class="trip-card">
-                                {% if user.profile.avatar %}
-                                    <img class="avatar" src="{{ user.profile.avatar.url }}">
-                                {% else %}
-                                    <img class="avatar" src="/static/railmate/default_avatar.png">
-                                {% endif %}
-                                <button type="submit" class="btn" name="select" value="{{ contact }}">
-                                    <h4>{{ contact }}</h4></button>
-                            </div>
-                            <br>
+                            {% if contact != recipient %}
+                                <div class="">
+                                    <button type="submit" class="btn transparent" name="select" value="{{ contact }}">
+                                        <h4>{{ contact }}</h4></button>
+                                </div>
+                            {% else %}
+                                <div class="selector">
+                                        <h4>{{ contact }}</h4>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </form>
                 </div>
@@ -37,23 +37,23 @@
             <div class="tab-background">
 
                 <div class="panel-body card-background text-left">
-                    <div class="list-unstyled coversation_list" >
+                    <div class="list-unstyled coversation_list">
                         <!-- list conversation messages-->
                         {% for msg in conversation.reverse %}
                             {% if msg.sender == user %}
                                 <li class="right" style="text-align: right">
-                                <div class="message-card text-right">
-                                    <h5>{{ msg }}</h5>
-                                    <h6 class="text-left" style="color: #a0a0a0">{{ msg.sent_at }}</h6>
-                                </div>
+                                    <div class="message-card text-right">
+                                        <h5>{{ msg }}</h5>
+                                        <h6 class="text-left" style="color: #a0a0a0">{{ msg.sent_at }}</h6>
+                                    </div>
                                 </li>
 
                             {% else %}
                                 <li>
-                                <div class="message-card2">
-                                    <h5>{{ msg }}</h5>
-                                    <h6 class="text-right" style="color: #a0a0a0">{{ msg.sent_at }}</h6>
-                                </div>
+                                    <div class="message-card2">
+                                        <h5>{{ msg }}</h5>
+                                        <h6 class="text-right" style="color: #a0a0a0">{{ msg.sent_at }}</h6>
+                                    </div>
                                 </li>
                             {% endif %}
 

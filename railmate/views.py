@@ -294,7 +294,6 @@ def messages(request):
 
     conversation = MessagingService().get_conversation(user, recipient)
 
-
     if request.method == 'POST' and request.POST.get("select"):
         recipient_name = request.POST['select']
         message_form = MessageForm(instance=request.user)
@@ -313,7 +312,8 @@ def messages(request):
         'conversation': conversation,
         'conversations': conversations,
         'unread': unread,
-        'message_form': message_form
+        'message_form': message_form,
+        'recipient': recipient
     })
 
 
