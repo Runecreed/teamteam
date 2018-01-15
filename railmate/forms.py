@@ -6,8 +6,7 @@ from django import forms
 from django.forms import SelectDateWidget
 from django.forms.fields import DateField
 
-from railmate.models import Profile, Trip, Search
-from railmate.models import Profile, Message, Trip
+from railmate.models import Profile, Message, Trip, Search
 
 
 class UserForm(forms.ModelForm):
@@ -26,24 +25,24 @@ class ProfileForm(forms.ModelForm):
         fields = ('avatar', 'birth_date')
 
 
+class MessageForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'style': 'width: 100%;'}), label='')
+
+    class Meta:
+        model = Message
+        fields = ('content',)
+
+
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
-        fields = ('source', 'destination', 'date', 'time', 'deviation', 'subscription', 'compensation')
+        fields = ('source', 'destination', 'datetime', 'datetime_end', 'deviation', 'subscription', 'compensation')
 
 
 class SearchForm(forms.ModelForm):
     class Meta:
         model = Search
         fields = ('source', 'destination', 'date', 'time',)
-
-class MessageForm(forms.ModelForm):
-    content = forms.TextInput()
-
-    class Meta:
-        model = Message
-        fields = ('content', 'recipient')
-        labels = {'content': ''}
 
 
 class TripForm(forms.ModelForm):

@@ -38,13 +38,36 @@
     border-radius: 5px;
 }
 
-.card-title{
+.card-title {
     min-height: 40px;
 }
 
-.trip-card{
+.trip-card {
     background-color: #FFFFFF;
     padding: 5px;
+    border-radius: 5px;
+}
+
+.coversation_list {
+
+    max-height: 50vh;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.message-card {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 5px;
+    margin: 3px;
+    border-radius: 5px;
+}
+
+.message-card2 {
+    display: inline-block;
+    background-color: #c0e0ff;
+    padding: 5px;
+    margin: 3px;
     border-radius: 5px;
 }
 
@@ -60,7 +83,6 @@
     border-top-right-radius: 10px;
     border-color: transparent;
 }
-
 
 .list-item {
     margin-top: 20px

@@ -5,6 +5,7 @@ from django.core import serializers
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, Template, loader, RequestContext
@@ -16,25 +17,19 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 # Create your views here.
-from django.utils import formats
 
-from railmate.forms import ProfileForm, UserForm, TripForm
-from railmate.models import Profile, Trip
-
-from railmate.services import NS
 from railmate.forms import ProfileForm, UserForm, MessageForm, TripForm
-from railmate.models import Profile, Message, Trip
+from railmate.models import Profile, Trip
 from railmate.services import NS, MessagingService
 import json
 
 
 def home(request):
-
     if request.method == "POST":
         form = TripForm(request.POST)
         if form.is_valid():
             trip = form.save(commit=False)
-            trip.user = request.user #moet nog aangepast worden naar de goede user (misschien)
+            trip.user = request.user  # moet nog aangepast worden naar de goede user (misschien)
             trip.companions = 0
             trip.max_companions = 3
             trip.save()
@@ -139,13 +134,13 @@ def create_trip(request):
 
 # User filled in the form and presses Search
 def home_search(request):
-    #searchQuery = request.GET.urlencode()  # debug var
+    # searchQuery = request.GET.urlencode()  # debug var
 
     source = request.GET.get('source', '')
     destination = request.GET.get('destination', '')
     date = request.GET.get('date', '')
-    #recurrence = request.GET.get('recurrence', '')
-    #deviation = request.GET.get('deviation', '')
+    # recurrence = request.GET.get('recurrence', '')
+    # deviation = request.GET.get('deviation', '')
     time = request.GET.get('time', '')
     if date:
         date_object = datetime.strptime(date, '%Y-%m-%d').date()
@@ -165,25 +160,27 @@ def home_search(request):
 
     # a candidate is not OK if it does not visit the source station, so filter again on source compared to the list
 
-    #search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence,
-              #'deviation': deviation, 'time': time}
-    #results = 'Not implemented yet'
+    # search = {'source': source, 'destination': destination, 'date': date, 'recurrence': recurrence,
+    # 'deviation': deviation, 'time': time}
+    # results = 'Not implemented yet'
 
     proper_results = []
     for result in candidates:
         # decode station list
-        station_list = json.loads(result.station_list)  # this should now be a list representation - it isn't though, for some reason
+        station_list = json.loads(
+            result.station_list)  # this should now be a list representation - it isn't though, for some reason
         if (source in station_list):
-            proper_results.append(result)       # this one is valid
+            proper_results.append(result)  # this one is valid
 
     # return results
     form = NS().station_list()
-    #return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
+    # return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
     trips = Trip.objects.all().filter(
         Q(source=source)
     )
     return render(request, 'railmate/trips.html', {'form': form, 'trips': trips})
-    return render(request, 'railmate/trips.html', {'form': form, 'search_results': proper_results, 'search': actual_query})
+    return render(request, 'railmate/trips.html',
+                  {'form': form, 'search_results': proper_results, 'search': actual_query})
 
 
 # User presses POST button to create a trip
@@ -279,18 +276,41 @@ def logout(request):
 
 
 def messages(request):
+    user = request.user
+    global recipient
     # conversation = Message.objects.get(user=request.user)
-    if request.method == 'POST':
+    conversations = MessagingService().get_conversations(user)
+    unread = MessagingService().get_unread_messages(user)
+
+    if not conversations:
+        conversations = "No contacts made yet"
+
+    try:
+        recipient
+    except NameError:
+        recipient = conversations[0]
+
+    conversation = MessagingService().get_conversation(user, recipient)
+
+
+    if request.method == 'POST' and request.POST.get("select"):
+        recipient_name = request.POST['select']
+        message_form = MessageForm(instance=request.user)
+        recipient = User.objects.get(username=recipient_name)
+        conversation = MessagingService().get_conversation(user, recipient, '', False, True)
+
+    elif request.method == 'POST' and request.POST.get("send_message", "") == 'send_message':
         message_form = MessageForm(request.POST)
         if message_form.is_valid():
             msg = message_form.save(commit=False)
-            msg.sender = request.user
-            MessagingService().send_message(msg.sender, msg.recipient, msg.content)
-            return redirect('/account')
+            MessagingService().send_message(user, recipient, msg.content)
+            return redirect('/messages')
     else:
         message_form = MessageForm(instance=request.user)
     return render(request, 'railmate/messages.html', {
-        # 'messages': conversation,
+        'conversation': conversation,
+        'conversations': conversations,
+        'unread': unread,
         'message_form': message_form
     })
 
@@ -298,8 +318,3 @@ def messages(request):
 def mk_int(s):
     s = s.strip()
     return int(s) if s else 0
-
-@login_required
-def messages(request):
-    user_info = Profile.objects.get(pk=request.user)
-    return render(request, 'railmate/messages.html')
