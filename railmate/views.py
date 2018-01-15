@@ -16,25 +16,25 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.db.models import Q
 
-from railmate.forms import ProfileForm, UserForm, MessageForm
-from railmate.models import Profile, Message, Trip, Fellow_passengers, TripForm
+from railmate.forms import ProfileForm, UserForm, MessageForm, TripForm
+from railmate.models import Profile, Message, Trip, Fellow_passengers
 from railmate.services import NS, MessagingService
 import json
 
 
 def home(request):
-    if request.method == "POST":
-        form = TripForm(request.POST)
-        if form.is_valid():
-            trip = form.save(commit=False)
-            trip.user = request.user  # moet nog aangepast worden naar de goede user (misschien)
-            trip.companions = 0
-            trip.max_companions = 3
-            trip.save()
-            return redirect('/', pk=trip.pk)
-        else:
-            form = TripForm()
-        return render(request, 'railmate/index.html', {'form': form})
+    # if request.method == "POST":
+    #     form = TripForm(request.POST)
+    #     if form.is_valid():
+    #         trip = form.save(commit=False)
+    #         trip.user = request.user  # moet nog aangepast worden naar de goede user (misschien)
+    #         trip.companions = 0
+    #         trip.max_companions = 3
+    #         trip.save()
+    #         return redirect('/', pk=trip.pk)
+    #     else:
+    #         form = TripForm()
+    #     return render(request, 'railmate/index.html', {'form': form})
 
     # Required :: Form must have keys 'source', with a list of sources undearneatha:: form = {'station': ['Eindhoven', 'Maastricht', ...], 'destination: ..}
     # refer to it in the template as : form.source  --- gets the list of sources
@@ -173,12 +173,9 @@ def home_search(request):
     # return results
     form = NS().station_list()
     # return render(request, 'railmate/trips.html', {'form': form, 'search_results': search})
-    trips = Trip.objects.all().filter(
-        Q(source=source)
-    )
-    return render(request, 'railmate/trips.html', {'form': form, 'trips': trips})
-    return render(request, 'railmate/trips.html',
-                  {'form': form, 'search_results': proper_results, 'search': actual_query})
+    trips = Trip.objects.all().filter(Q(source=source))
+    return render(request, 'railmate/trips.html', {'form': form, 'trips': trips, 'search_results': proper_results, 'search': actual_query})
+
 
 
 # User presses POST button to create a trip
@@ -196,8 +193,7 @@ def home_search(request):
 
 
 def user_page(request, user_id):
-    return HttpResponse("You're looking at user %s." % user_id)
-
+        return HttpResponse("You're looking at user %s." % user_id)
 
 def login_user(request):
     logout(request)
@@ -260,8 +256,8 @@ def account(request):
     ride_along = Fellow_passengers.objects.filter(user= request.user)
     contacts = Profile.objects.all()
     #passengers moet lijst met user waarme je in een conversatie zit
-    trip_info = Trip.objects.filter(user=request.user,date__gte=date.today()).order_by('date')
-    trip_history = Trip.objects.filter(user=request.user).order_by('-date').exclude(date__gte=date.today())
+    trip_info = Trip.objects.filter(user=request.user, datetime__gte=date.today()).order_by('date')
+    trip_history = Trip.objects.filter(user=request.user).order_by('-date').exclude(datetime__gte=date.today())
     trip_info_history = Trip.objects.filter(user=request.user).order_by('-date')
     user_info = Profile.objects.get(user=request.user)
     if user_info.birth_date is None:
@@ -319,14 +315,20 @@ def messages(request):
         'unread': unread,
         'message_form': message_form
     })
+
+
 def trip_edit(request,trip_id):
     trip_info = Trip.objects.get(pk=trip_id)
     return render(request, 'railmate/edit_trip.html', {'trip_info': trip_info})
+
+
 def trip_delete(request,trip_id):
     trip_info = Trip.objects.get(pk=trip_id)
     if trip_info.user == request.user:
         trip_info.delete()
     return redirect(account)
+
+
 def add_passenger(request,trip_id):
     user_id = request.POST['passanger']
     trip_info = Trip.objects.get(pk=trip_id)
